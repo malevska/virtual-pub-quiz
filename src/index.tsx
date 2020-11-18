@@ -1,8 +1,8 @@
 import * as React from "react";
-import {render} from "react-dom";
+import { render } from "react-dom";
 
 const App = () => {
-    return <div>Hello World</div>
-}
+  return <div>Hello World</div>;
+};
 
-render(<App/>, document.getElementById('root'));
+render(<App />, document.getElementById("root"));

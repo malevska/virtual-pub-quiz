@@ -1,9 +1,7 @@
 {
   "dependencies": {
-    "immer": "^7.0.14",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "use-immer": "^0.4.1"
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@types/react": "^16.9.56",
