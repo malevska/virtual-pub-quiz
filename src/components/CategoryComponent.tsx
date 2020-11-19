@@ -1,12 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
-import { render } from "react-dom";
 
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
-import { Category } from "./model";
+import { Category } from "../store/types";
 
 import { QuestionComponent } from "./QuestionComponent";
-import { changeCategoryTitle } from "./index";
+import { changeCategoryTitle } from "../index";
 
 // Modifies a categry
 export const CategoryComponent = (props: {

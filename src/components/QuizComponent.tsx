@@ -2,9 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Quiz } from "./model";
+import { Quiz } from "../store/types";
 
-import { addCategory, changeCategoryTitle, changeQuizTitle } from "./index";
+import { addCategory, changeQuizTitle } from "../index";
 
 import { CategoryComponent } from "./CategoryComponent";
 

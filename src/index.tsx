@@ -11,11 +11,11 @@ import {
 } from "react-router-dom";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { AppModel, Question } from "./model";
-import { PlayQuizComponent } from "./PlayQuizComponent";
-import { QuizComponent } from "./QuizComponent";
+import { Question } from "./store/types";
+import { PlayQuizComponent } from "./components/PlayQuizComponent";
+import { QuizComponent } from "./components/QuizComponent";
 
-const db: AppModel = {
+const db = {
   quizzes: [
     {
       title: "Test Quiz",

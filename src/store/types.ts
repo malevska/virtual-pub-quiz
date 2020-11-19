@@ -1,7 +1,3 @@
-export interface AppModel {
-  quizzes: Quiz[];
-}
-
 export interface Quiz {
   title: string;
   isPlaying: boolean;

@@ -2,8 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput, Textarea, Dialog } from "evergreen-ui";
-import { Question } from "./model";
-import { addQuestion, editQuestion } from "./index";
+import { Question } from "../store/types";
+import { addQuestion, editQuestion } from "../index";
 
 // Modifies a question
 export const QuestionComponent = (props: {
