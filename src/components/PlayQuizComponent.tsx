@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Card, Dialog, Pane, Pill, TextInput } from "evergreen-ui";
-import { Quiz } from "./model";
+import { Quiz } from "../store/model";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";

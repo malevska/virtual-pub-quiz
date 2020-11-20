@@ -2,9 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Quiz } from "./model";
+import { Quiz } from "../store/types";
 
-import { addPlayers, editPlayers } from "./index";
+import { addPlayers, editPlayers } from "../index";
 import { useHistory } from "react-router";
 
 // Modifies the players list
