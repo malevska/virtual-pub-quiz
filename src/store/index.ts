@@ -1,4 +1,4 @@
-import { Question, Quiz } from "./types";
+import { Question, Quiz, AppMethods } from "./types";
 import { useState } from "react";
 
 /**
@@ -137,5 +137,5 @@ export const useQuizzes = (initial: Quiz[]) => {
       changeCategoryTitle,
       changePlayerName,
     },
-  ];
+  ] as [Quiz[], AppMethods];
 };

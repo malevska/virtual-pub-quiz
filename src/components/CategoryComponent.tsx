@@ -2,16 +2,19 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
-import { Category } from "../store/types";
+import { Category, AppMethods } from "../store/types";
 
 import { QuestionComponent } from "./QuestionComponent";
-import { changeCategoryTitle } from "../index";
+import { useQuizzes } from "../store/index";
 
 // Modifies a categry
 export const CategoryComponent = (props: {
   category: Category;
   catIndex: number;
   quizIndex: number;
+  changeCategoryTitle: AppMethods["changeCategoryTitle"];
+  addQuestion: AppMethods["addQuestion"];
+  editQuestion: AppMethods["editQuestion"];
 }) => {
   const category = props.category;
   const [categoryTitle, setCategoryTitle] = useState(category.title);
@@ -27,7 +30,11 @@ export const CategoryComponent = (props: {
           setCategoryTitle(e.target.value);
         }}
         onBlur={() => {
-          changeCategoryTitle(props.quizIndex, props.catIndex, categoryTitle);
+          props.changeCategoryTitle(
+            props.quizIndex,
+            props.catIndex,
+            categoryTitle
+          );
         }}
       />
       <Button
@@ -73,6 +80,8 @@ export const CategoryComponent = (props: {
           onClose={() => {
             setDialogIsShown(false);
           }}
+          addQuiestion={props.addQuestion}
+          editQuestion={props.editQuestion}
         />
       ) : null}
     </Pane>

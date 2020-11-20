@@ -2,13 +2,17 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Quiz } from "../store/types";
+import { Quiz, AppMethods } from "../store/types";
 
-import { addPlayers, editPlayers } from "../index";
 import { useHistory } from "react-router";
 
 // Modifies the players list
-export const PlayersComponent = (props: { quiz: Quiz; index: string }) => {
+export const PlayersComponent = (props: {
+  quiz: Quiz;
+  index: string;
+  addPlayers: AppMethods["addPlayers"];
+  editPlayers: AppMethods["editPlayers"];
+}) => {
   const quiz = props.quiz;
   const [newPlayerName, setNewPlayerName] = useState("");
   const [players, setPlayers] = useState<string[]>(props.quiz.players);
@@ -44,8 +48,8 @@ export const PlayersComponent = (props: { quiz: Quiz; index: string }) => {
       <Button
         onClick={() => {
           props.quiz.players.length > 0
-            ? editPlayers(parseInt(props.index, 10), players)
-            : addPlayers(parseInt(props.index, 10), players);
+            ? props.editPlayers(parseInt(props.index, 10), players)
+            : props.addPlayers(parseInt(props.index, 10), players);
           history.push(`/play/${props.index}`);
         }}
       >

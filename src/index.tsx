@@ -5,149 +5,33 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useParams,
   useHistory,
 } from "react-router-dom";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Question } from "./store/types";
+
 import { PlayQuizComponent } from "./components/PlayQuizComponent";
 import { QuizComponent } from "./components/QuizComponent";
 
-const db = {
-  quizzes: [
-    {
-      title: "Test Quiz",
-      isPlaying: false,
-      players: [],
-      categories: [
-        {
-          title: "Cat 1",
-          questions: [
-            { text: "", answer: "", embeds: "", points: 1 },
-            { text: "", answer: "", embeds: "", points: 2 },
-          ],
-        },
-        {
-          title: "Cat 2",
-          questions: [
-            { text: "", answer: "", embeds: "", points: 1 },
-            { text: "", answer: "", embeds: "", points: 2 },
-          ],
-        },
-      ],
-    },
-  ],
-};
+import { Quiz, AppMethods } from "./store/types";
+import { useQuizzes } from "./store/index";
 
-//add new quiz to the list of quizzes
-const addQuiz = (title: string) => {
-  db.quizzes.push({
-    title,
-    isPlaying: false,
-    players: [],
-    categories: [],
-  });
-  debugger;
-  render(<App />, document.getElementById("app"));
-};
+const db: Quiz[] = [];
 
-const removeQuiz = (index: number) => {
-  db.quizzes.splice(index, 1);
-  render(<App />, document.getElementById("app"));
-};
-
-const resetQuiz = (index: number) => {
-  db.quizzes[index].isPlaying = false;
-  render(<App />, document.getElementById("app"));
-};
-
-const startQuiz = (index: number) => {
-  db.quizzes[index].isPlaying = true;
-  render(<App />, document.getElementById("app"));
-};
-
-export const addCategory = (quizIndex: number, catTitle: string) => {
-  db.quizzes[quizIndex].categories.push({
-    title: catTitle,
-    questions: [],
-  });
-  render(<App />, document.getElementById("app"));
-};
-
-export const addQuestion = (
-  quizIndex: number,
-  catIndex: number,
-  q: Question
-) => {
-  db.quizzes[quizIndex].categories[catIndex].questions.push({
-    text: q.text,
-    answer: q.answer,
-    embeds: q.embeds,
-    points: q.points,
-  });
-  render(<App />, document.getElementById("app"));
-};
-
-export const editQuestion = (
-  quizIndex: number,
-  catIndex: number,
-  questionIndex: number,
-  newQuestionParameters: Question
-) => {
-  db.quizzes[quizIndex].categories[catIndex].questions[questionIndex].text =
-    newQuestionParameters.text;
-  db.quizzes[quizIndex].categories[catIndex].questions[questionIndex].answer =
-    newQuestionParameters.answer;
-  db.quizzes[quizIndex].categories[catIndex].questions[questionIndex].embeds =
-    newQuestionParameters.embeds;
-  db.quizzes[quizIndex].categories[catIndex].questions[questionIndex].points =
-    newQuestionParameters.points;
-
-  render(<App />, document.getElementById("app"));
-};
-
-export const changeQuizTitle = (quizIndex: number, title: string) => {
-  db.quizzes[quizIndex].title = title;
-  render(<App />, document.getElementById("app"));
-};
-
-export const changeCategoryTitle = (
-  quizIndex: number,
-  catIndex: number,
-  title: string
-) => {
-  db.quizzes[quizIndex].categories[catIndex].title = title;
-  render(<App />, document.getElementById("app"));
-};
-
-export const addPlayers = (quizIndex: number, playersList: string[]) => {
-  playersList.map((player) => db.quizzes[quizIndex].players.push(player));
-  render(<App />, document.getElementById("app"));
-};
-
-export const editPlayers = (quizIndex: number, playersList: string[]) => {
-  db.quizzes[quizIndex].players = [];
-  playersList.map((player) => db.quizzes[quizIndex].players.push(player));
-  render(<App />, document.getElementById("app"));
-};
-
-export const changePlayerName = (
-  quizIndex: number,
-  playerIndex: number,
-  player: string
-) => {
-  db.quizzes[quizIndex].players[playerIndex] = player;
-  render(<App />, document.getElementById("app"));
-};
-
-const QuizList = () => {
+const QuizList = ({
+  quizzes,
+  methods,
+}: {
+  quizzes: Quiz[];
+  methods: AppMethods;
+}) => {
   const history = useHistory();
   const [newQuizTitle, setNewQuizTitle] = useState("");
 
+  //add a new Quiz to the list and clear the input field
   const onClickHandler = () => {
-    addQuiz(newQuizTitle);
+    methods.addQuiz(newQuizTitle);
     setNewQuizTitle("");
   };
 
@@ -164,7 +48,7 @@ const QuizList = () => {
       </Button>
 
       <h1>All Quizzes</h1>
-      {db.quizzes.map((q, index) => (
+      {quizzes.map((q, index) => (
         <h2 key={index}>
           {q.title} ({q.isPlaying ? "P" : "/"}) -
           <Button margin="5px" onClick={() => history.push(`/quiz/${index}`)}>
@@ -174,15 +58,15 @@ const QuizList = () => {
             margin="5px"
             onClick={() => {
               history.push(`/play/${index}`);
-              startQuiz(index);
+              methods.startQuiz(index);
             }}
           >
             Play
           </Button>
-          <Button margin="5px" onClick={() => resetQuiz(index)}>
+          <Button margin="5px" onClick={() => methods.resetQuiz(index)}>
             Reset
           </Button>
-          <Button margin="5px" onClick={() => removeQuiz(index)}>
+          <Button margin="5px" onClick={() => methods.removeQuiz(index)}>
             Remove
           </Button>
         </h2>
@@ -191,43 +75,87 @@ const QuizList = () => {
   );
 };
 
-const QuizRoute = () => {
+const QuizRoute = ({
+  quizzes,
+  methods,
+}: {
+  quizzes: Quiz[];
+  methods: AppMethods;
+}) => {
   let { index } = useParams<{ index: string }>();
-  return <QuizComponent quiz={db.quizzes[index]} index={index} />;
-};
 
-const PlayQuizRoute = () => {
-  let { index } = useParams<{ index: string }>();
   return (
-    <PlayQuizComponent
-      quiz={db.quizzes[index]}
+    <QuizComponent
+      quiz={quizzes[index]}
       index={index}
-      editPlayersMode={false}
+      addCategory={methods.addCategory}
+      changeQuizTitle={methods.changeQuizTitle}
+      changeCategoryTitle={methods.changeCategoryTitle}
+      addQuestion={methods.addQuestion}
+      editQuestion={methods.editQuestion}
     />
   );
 };
 
-const QuizPlayersRoute = () => {
+const PlayQuizRoute = ({
+  quizzes,
+  methods,
+}: {
+  quizzes: Quiz[];
+  methods: AppMethods;
+}) => {
   let { index } = useParams<{ index: string }>();
   return (
     <PlayQuizComponent
-      quiz={db.quizzes[index]}
+      quiz={quizzes[index]}
+      index={index}
+      editPlayersMode={false}
+      addPlayers={methods.addPlayers}
+      editPlayers={methods.editPlayers}
+    />
+  );
+};
+
+const QuizPlayersRoute = ({
+  quizzes,
+  methods,
+}: {
+  quizzes: Quiz[];
+  methods: AppMethods;
+}) => {
+  let { index } = useParams<{ index: string }>();
+  return (
+    <PlayQuizComponent
+      quiz={quizzes[index]}
       index={index}
       editPlayersMode={true}
+      addPlayers={methods.addPlayers}
+      editPlayers={methods.editPlayers}
     />
   );
 };
 
 const App = () => {
+  const [quizzes, methods] = useQuizzes(db);
+
   return (
     <Router>
       <Switch>
         <Route path="/about">NOT IMPLEMENTED</Route>
-        <Route path="/quiz/:index" children={<QuizRoute />} />
-        <Route path="/play/:index" children={<PlayQuizRoute />} />
-        <Route path="/players/:index" children={<QuizPlayersRoute />} />
+        <Route
+          path="/quiz/:index"
+          children={<QuizRoute quizzes={quizzes} methods={methods} />}
+        />
+        <Route
+          path="/play/:index"
+          children={<PlayQuizRoute quizzes={quizzes} methods={methods} />}
+        />
+        <Route
+          path="/players/:index"
+          children={<QuizPlayersRoute quizzes={quizzes} methods={methods} />}
+        />
         <Route path="/">
-          <QuizList />
+          <QuizList quizzes={quizzes} methods={methods} />
         </Route>
       </Switch>
     </Router>
