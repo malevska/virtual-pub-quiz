@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Button, Card, Dialog, Pane, Pill, TextInput } from "evergreen-ui";
+
+import { Button, Pane, Pill } from "evergreen-ui";
 import { Quiz, AppMethods } from "../store/types";
-import { useState } from "react";
+
 import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";
 

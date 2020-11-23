@@ -5,7 +5,6 @@ import { Button, Pane, TextInput, Pill } from "evergreen-ui";
 import { Category, AppMethods } from "../store/types";
 
 import { QuestionComponent } from "./QuestionComponent";
-import { useQuizzes } from "../store/index";
 
 // Modifies a categry
 export const CategoryComponent = (props: {
