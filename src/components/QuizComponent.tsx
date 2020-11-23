@@ -2,21 +2,28 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Quiz } from "../store/types";
 
-import { addCategory, changeQuizTitle } from "../index";
+import { Quiz, AppMethods } from "../store/types";
 
 import { CategoryComponent } from "./CategoryComponent";
 
 // Modifies a quiz
-export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
+export const QuizComponent = (props: {
+  quiz: Quiz;
+  index: string;
+  addCategory: AppMethods["addCategory"];
+  changeQuizTitle: AppMethods["changeQuizTitle"];
+  changeCategoryTitle: AppMethods["changeCategoryTitle"];
+  addQuestion: AppMethods["addQuestion"];
+  editQuestion: AppMethods["editQuestion"];
+}) => {
   const quiz = props.quiz;
 
   const [quizTitle, setNewQuizTitle] = useState(quiz.title);
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
 
   const onClickHandler = () => {
-    addCategory(parseInt(props.index, 10), newCategoryTitle);
+    props.addCategory(parseInt(props.index, 10), newCategoryTitle);
     setNewCategoryTitle("");
   };
 
@@ -28,7 +35,7 @@ export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
           setNewQuizTitle(e.target.value);
         }}
         onBlur={() => {
-          changeQuizTitle(parseInt(props.index, 10), quizTitle);
+          props.changeQuizTitle(parseInt(props.index, 10), quizTitle);
         }}
       />
       <Pane>
@@ -46,6 +53,9 @@ export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
             category={cat}
             catIndex={index}
             quizIndex={parseInt(props.index, 10)}
+            changeCategoryTitle={props.changeCategoryTitle}
+            addQuestion={props.addQuestion}
+            editQuestion={props.editQuestion}
           />
         ))}
 

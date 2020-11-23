@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Button, Card, Dialog, Pane, Pill, TextInput } from "evergreen-ui";
-import { Quiz } from "../store/model";
-import { useState } from "react";
+
+import { Button, Pane, Pill } from "evergreen-ui";
+import { Quiz, AppMethods } from "../store/types";
+
 import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";
 
@@ -9,6 +10,8 @@ export const PlayQuizComponent = (props: {
   quiz: Quiz;
   index: string;
   editPlayersMode: boolean;
+  addPlayers: AppMethods["addPlayers"];
+  editPlayers: AppMethods["editPlayers"];
 }) => {
   const quiz = props.quiz;
   const history = useHistory();
@@ -35,12 +38,24 @@ export const PlayQuizComponent = (props: {
   );
 
   if (props.editPlayersMode) {
-    return <PlayersComponent quiz={props.quiz} index={props.index} />;
+    return (
+      <PlayersComponent
+        quiz={props.quiz}
+        index={props.index}
+        addPlayers={props.addPlayers}
+        editPlayers={props.editPlayers}
+      />
+    );
   }
 
   return quiz.players.length > 0 && quiz.isPlaying ? (
     quizPane
   ) : (
-    <PlayersComponent quiz={props.quiz} index={props.index} />
+    <PlayersComponent
+      quiz={props.quiz}
+      index={props.index}
+      addPlayers={props.addPlayers}
+      editPlayers={props.editPlayers}
+    />
   );
 };
