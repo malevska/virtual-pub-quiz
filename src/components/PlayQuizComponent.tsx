@@ -65,7 +65,12 @@ export const PlayQuizComponent = (props: {
     );
 
   return props.editPlayersMode || quiz.players.length === 0 ? (
-    <PlayersComponent quiz={props.quiz} index={props.qIndex} />
+    <PlayersComponent
+      quiz={props.quiz}
+      index={props.qIndex}
+      addPlayers={props.addPlayers}
+      editPlayers={props.editPlayers}
+    />
   ) : (
     quizPane
   );
