@@ -14,15 +14,10 @@ export const PlayQuizComponent = (props: {
   const quiz = props.quiz;
   const history = useHistory();
 
-  const [questionData, setQuestionData] = useState<{
-    questIndex: number;
+  const [indexes, setIndexes] = useState<{
     catIndex: number;
-    question: Question;
-  }>({
-    questIndex: -1,
-    catIndex: -1,
-    question: null,
-  });
+    quesIndex: number;
+  }>({ catIndex: -1, quesIndex: -1 });
 
   const quizPane = (
     <Pane padding="20px">
@@ -35,10 +30,9 @@ export const PlayQuizComponent = (props: {
               margin="5px"
               isInteractive={true}
               onClick={() => {
-                setQuestionData({
-                  questIndex: quesInd,
+                setIndexes({
+                  quesIndex: quesInd,
                   catIndex: catInd,
-                  question: ques,
                 });
               }}
             >
@@ -56,23 +50,23 @@ export const PlayQuizComponent = (props: {
     </Pane>
   );
 
-  if (props.editPlayersMode) {
-    return <PlayersComponent quiz={props.quiz} index={props.qIndex} />;
-  }
-
-  if (questionData.questIndex !== -1)
+  if (indexes.quesIndex !== -1)
     return (
       <ViewQuestionComponent
-        question={questionData.question}
-        catIndex={questionData.catIndex}
+        question={
+          props.quiz.categories[indexes.catIndex].questions[indexes.quesIndex]
+        }
+        catIndex={indexes.catIndex}
         quizIndex={parseInt(props.qIndex, 10)}
-        questionIndex={questionData.questIndex}
+        questionIndex={indexes.quesIndex}
       />
     );
 
-  return quiz.players.length > 0 && quiz.isPlaying ? (
-    quizPane
-  ) : (
+  return props.editPlayersMode ||
+    quiz.players.length === 0 ||
+    !quiz.isPlaying ? (
     <PlayersComponent quiz={props.quiz} index={props.qIndex} />
+  ) : (
+    quizPane
   );
 };
