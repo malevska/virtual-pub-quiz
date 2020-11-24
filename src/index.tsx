@@ -201,7 +201,7 @@ const PlayQuizRoute = () => {
   return (
     <PlayQuizComponent
       quiz={db.quizzes[index]}
-      index={index}
+      qIndex={index}
       editPlayersMode={false}
     />
   );
@@ -212,7 +212,7 @@ const QuizPlayersRoute = () => {
   return (
     <PlayQuizComponent
       quiz={db.quizzes[index]}
-      index={index}
+      qIndex={index}
       editPlayersMode={true}
     />
   );

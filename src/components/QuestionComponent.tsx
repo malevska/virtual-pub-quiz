@@ -12,7 +12,7 @@ export const QuestionComponent = (props: {
   catIndex: number;
   quizIndex: number;
   mode: string;
-  dialog?: boolean;
+  dialog: boolean;
   onClose?: () => void;
 }) => {
   const question = props.question;
