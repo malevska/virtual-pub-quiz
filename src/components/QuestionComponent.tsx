@@ -2,8 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Button, Pane, TextInput, Textarea, Dialog } from "evergreen-ui";
-import { Question } from "../store/types";
-import { addQuestion, editQuestion } from "../index";
+import { Question, AppMethods } from "../store/types";
 
 // Modifies a question
 export const QuestionComponent = (props: {
@@ -14,6 +13,8 @@ export const QuestionComponent = (props: {
   mode: string;
   dialog: boolean;
   onClose?: () => void;
+  addQuiestion: AppMethods["addQuestion"];
+  editQuestion: AppMethods["editQuestion"];
 }) => {
   const question = props.question;
 
@@ -58,18 +59,23 @@ export const QuestionComponent = (props: {
       onCloseComplete={() => {
         props.onClose();
         props.mode === "add"
-          ? addQuestion(props.quizIndex, props.catIndex, {
+          ? props.addQuiestion(props.quizIndex, props.catIndex, {
               text: questionText,
               answer: answer,
               embeds: embeds,
               points: points,
             })
-          : editQuestion(props.quizIndex, props.catIndex, props.questionIndex, {
-              text: questionText,
-              answer: answer,
-              embeds: embeds,
-              points: points,
-            });
+          : props.editQuestion(
+              props.quizIndex,
+              props.catIndex,
+              props.questionIndex,
+              {
+                text: questionText,
+                answer: answer,
+                embeds: embeds,
+                points: points,
+              }
+            );
       }}
     >
       {pane}

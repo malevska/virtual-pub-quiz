@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Pane, Pill } from "evergreen-ui";
-import { Quiz, Question } from "../store/types";
+import { Quiz, AppMethods } from "../store/types";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";
@@ -10,6 +10,8 @@ export const PlayQuizComponent = (props: {
   quiz: Quiz;
   qIndex: string;
   editPlayersMode: boolean;
+  addPlayers: AppMethods["addPlayers"];
+  editPlayers: AppMethods["editPlayers"];
 }) => {
   const quiz = props.quiz;
   const history = useHistory();
