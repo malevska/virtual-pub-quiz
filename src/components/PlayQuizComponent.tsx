@@ -9,12 +9,12 @@ import { ViewQuestionComponent } from "./ViewQuestionComponent";
 export const PlayQuizComponent = (props: {
   quiz: Quiz;
   qIndex: string;
-  editPlayersMode: boolean;
-  addPlayers: AppMethods["addPlayers"];
-  editPlayers: AppMethods["editPlayers"];
+  setPlayers: AppMethods["setPlayers"];
 }) => {
   const quiz = props.quiz;
   const history = useHistory();
+
+  const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
 
   const [indexes, setIndexes] = useState<{
     catIndex: number;
@@ -43,10 +43,7 @@ export const PlayQuizComponent = (props: {
           ))}
         </Pane>
       ))}
-      <Button
-        margin="5px"
-        onClick={() => history.push(`/players/${props.qIndex}`)}
-      >
+      <Button margin="5px" onClick={() => setShowPlayersScreen(true)}>
         Edit Players
       </Button>
     </Pane>
@@ -64,12 +61,12 @@ export const PlayQuizComponent = (props: {
       />
     );
 
-  return props.editPlayersMode || quiz.players.length === 0 ? (
+  return showPlayersScreen || quiz.players.length === 0 ? (
     <PlayersComponent
       quiz={props.quiz}
       index={props.qIndex}
-      addPlayers={props.addPlayers}
-      editPlayers={props.editPlayers}
+      setPlayers={props.setPlayers}
+      onClose={() => setShowPlayersScreen(false)}
     />
   ) : (
     quizPane

@@ -97,27 +97,10 @@ export const useQuizzes = (initial: Quiz[]) => {
     });
   };
 
-  const addPlayers = (qIndex: number, playersList: string[]) => {
+  const setPlayers = (qIndex: number, playersList: string[]) => {
     replaceQuiz(qIndex, {
       ...quizzes[qIndex],
-      players: [...quizzes[qIndex].players, ...playersList],
-    });
-  };
-
-  // Should be called "set players"
-  const editPlayers = (qIndex: number, players: string[]) => {
-    replaceQuiz(qIndex, { ...quizzes[qIndex], players });
-  };
-
-  // should be called setPlayer since the name is all the data about the player
-  const changePlayerName = (qIndex: number, pIndex: number, name: string) => {
-    replaceQuiz(qIndex, {
-      ...quizzes[qIndex],
-      players: [
-        ...quizzes[qIndex].players.slice(0, pIndex),
-        name,
-        ...quizzes[qIndex].players.slice(pIndex + 1),
-      ],
+      players: [...playersList],
     });
   };
 
@@ -131,11 +114,9 @@ export const useQuizzes = (initial: Quiz[]) => {
       addCategory,
       addQuestion,
       editQuestion,
-      addPlayers,
-      editPlayers,
       changeQuizTitle,
       changeCategoryTitle,
-      changePlayerName,
+      setPlayers,
     },
   ] as [Quiz[], AppMethods];
 };

@@ -35,7 +35,5 @@ export type AppMethods = {
   ) => void;
   changeQuizTitle: (qIndex: number, title: string) => void;
   changeCategoryTitle: (qIndex: number, cIndex: number, title: string) => void;
-  addPlayers: (qIndex: number, playersList: string[]) => void;
-  editPlayers: (qIndex: number, players: string[]) => void;
-  changePlayerName: (qIndex: number, pIndex: number, name: string) => void;
+  setPlayers: (qIndex: number, playersList: string[]) => void;
 };

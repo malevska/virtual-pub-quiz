@@ -109,28 +109,7 @@ const PlayQuizRoute = ({
     <PlayQuizComponent
       quiz={quizzes[index]}
       qIndex={index}
-      editPlayersMode={false}
-      addPlayers={methods.addPlayers}
-      editPlayers={methods.editPlayers}
-    />
-  );
-};
-
-const QuizPlayersRoute = ({
-  quizzes,
-  methods,
-}: {
-  quizzes: Quiz[];
-  methods: AppMethods;
-}) => {
-  let { index } = useParams<{ index: string }>();
-  return (
-    <PlayQuizComponent
-      quiz={quizzes[index]}
-      qIndex={index}
-      editPlayersMode={true}
-      addPlayers={methods.addPlayers}
-      editPlayers={methods.editPlayers}
+      setPlayers={methods.setPlayers}
     />
   );
 };
@@ -149,10 +128,6 @@ const App = () => {
         <Route
           path="/play/:index"
           children={<PlayQuizRoute quizzes={quizzes} methods={methods} />}
-        />
-        <Route
-          path="/players/:index"
-          children={<QuizPlayersRoute quizzes={quizzes} methods={methods} />}
         />
         <Route path="/">
           <QuizList quizzes={quizzes} methods={methods} />
