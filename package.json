@@ -17,7 +17,8 @@
   },
   "scripts": {
     "watch": "node_modules/.bin/parcel watch src/index.html --no-hmr",
+    "typecheck": "node_modules/.bin/tsc -w",
     "serve": "node_modules/.bin/http-server -c-1 dist ",
-    "dev": "node_modules/.bin/run-p watch serve"
+    "dev": "node_modules/.bin/run-p watch serve typecheck"
   }
 }
