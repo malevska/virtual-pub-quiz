@@ -1,14 +1,14 @@
 import * as React from "react";
-
 import { Button, Pane, Pill } from "evergreen-ui";
 import { Quiz, AppMethods } from "../store/types";
-
+import { useState } from "react";
 import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";
+import { ViewQuestionComponent } from "./ViewQuestionComponent";
 
 export const PlayQuizComponent = (props: {
   quiz: Quiz;
-  index: string;
+  qIndex: string;
   editPlayersMode: boolean;
   addPlayers: AppMethods["addPlayers"];
   editPlayers: AppMethods["editPlayers"];
@@ -16,13 +16,28 @@ export const PlayQuizComponent = (props: {
   const quiz = props.quiz;
   const history = useHistory();
 
+  const [indexes, setIndexes] = useState<{
+    catIndex: number;
+    quesIndex: number;
+  }>({ catIndex: -1, quesIndex: -1 });
+
   const quizPane = (
     <Pane padding="20px">
-      {quiz.categories.map((cat, index) => (
-        <Pane key={index}>
+      {quiz.categories.map((cat, catInd) => (
+        <Pane key={catInd}>
           <h2>{cat.title}</h2>
-          {cat.questions.map((ques, i) => (
-            <Pill key={i} margin="5px" isInteractive={true}>
+          {cat.questions.map((ques, quesInd) => (
+            <Pill
+              key={quesInd}
+              margin="5px"
+              isInteractive={true}
+              onClick={() => {
+                setIndexes({
+                  quesIndex: quesInd,
+                  catIndex: catInd,
+                });
+              }}
+            >
               {ques.points}
             </Pill>
           ))}
@@ -30,32 +45,33 @@ export const PlayQuizComponent = (props: {
       ))}
       <Button
         margin="5px"
-        onClick={() => history.push(`/players/${props.index}`)}
+        onClick={() => history.push(`/players/${props.qIndex}`)}
       >
         Edit Players
       </Button>
     </Pane>
   );
 
-  if (props.editPlayersMode) {
+  if (indexes.quesIndex !== -1)
     return (
-      <PlayersComponent
-        quiz={props.quiz}
-        index={props.index}
-        addPlayers={props.addPlayers}
-        editPlayers={props.editPlayers}
+      <ViewQuestionComponent
+        question={
+          props.quiz.categories[indexes.catIndex].questions[indexes.quesIndex]
+        }
+        catIndex={indexes.catIndex}
+        quizIndex={parseInt(props.qIndex, 10)}
+        questionIndex={indexes.quesIndex}
       />
     );
-  }
 
-  return quiz.players.length > 0 && quiz.isPlaying ? (
-    quizPane
-  ) : (
+  return props.editPlayersMode || quiz.players.length === 0 ? (
     <PlayersComponent
       quiz={props.quiz}
-      index={props.index}
+      index={props.qIndex}
       addPlayers={props.addPlayers}
       editPlayers={props.editPlayers}
     />
+  ) : (
+    quizPane
   );
 };

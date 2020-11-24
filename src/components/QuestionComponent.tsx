@@ -11,7 +11,7 @@ export const QuestionComponent = (props: {
   catIndex: number;
   quizIndex: number;
   mode: string;
-  dialog?: boolean;
+  dialog: boolean;
   onClose?: () => void;
   addQuiestion: AppMethods["addQuestion"];
   editQuestion: AppMethods["editQuestion"];

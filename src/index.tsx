@@ -108,7 +108,7 @@ const PlayQuizRoute = ({
   return (
     <PlayQuizComponent
       quiz={quizzes[index]}
-      index={index}
+      qIndex={index}
       editPlayersMode={false}
       addPlayers={methods.addPlayers}
       editPlayers={methods.editPlayers}
@@ -127,7 +127,7 @@ const QuizPlayersRoute = ({
   return (
     <PlayQuizComponent
       quiz={quizzes[index]}
-      index={index}
+      qIndex={index}
       editPlayersMode={true}
       addPlayers={methods.addPlayers}
       editPlayers={methods.editPlayers}
