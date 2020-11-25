@@ -23,9 +23,10 @@ export interface Question {
 export type AppMethods = {
   addQuiz: (title: string) => void;
   removeQuiz: (qIndex: number) => void;
-  resetQuiz: (qIndex: number) => void;
-  startQuiz: (qIndex: number) => void;
+  replaceQuiz: (index: number, quiz: Quiz) => void;
+  startQuiz: (qIndex: number, isPlaying: boolean) => void;
   addCategory: (qIndex: number, title: string) => void;
+  editCategory: (qIndex: number, cIndex: number, title: string) => void;
   addQuestion: (qIndex: number, cIndex: number, quest: Question) => void;
   editQuestion: (
     qIndex: number,
@@ -33,7 +34,5 @@ export type AppMethods = {
     quIndex: number,
     q: Question
   ) => void;
-  changeQuizTitle: (qIndex: number, title: string) => void;
-  changeCategoryTitle: (qIndex: number, cIndex: number, title: string) => void;
   setPlayers: (qIndex: number, playersList: string[]) => void;
 };

@@ -58,12 +58,12 @@ const QuizList = ({
             margin="5px"
             onClick={() => {
               history.push(`/play/${index}`);
-              methods.startQuiz(index);
+              methods.startQuiz(index, true);
             }}
           >
             Play
           </Button>
-          <Button margin="5px" onClick={() => methods.resetQuiz(index)}>
+          <Button margin="5px" onClick={() => methods.startQuiz(index, false)}>
             Reset
           </Button>
           <Button margin="5px" onClick={() => methods.removeQuiz(index)}>
@@ -88,9 +88,9 @@ const QuizRoute = ({
     <QuizComponent
       quiz={quizzes[index]}
       index={index}
+      replaceQuiz={methods.replaceQuiz}
       addCategory={methods.addCategory}
-      changeQuizTitle={methods.changeQuizTitle}
-      changeCategoryTitle={methods.changeCategoryTitle}
+      editCategory={methods.editCategory}
       addQuestion={methods.addQuestion}
       editQuestion={methods.editQuestion}
     />
