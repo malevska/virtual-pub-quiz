@@ -11,9 +11,9 @@ import { CategoryComponent } from "./CategoryComponent";
 export const QuizComponent = (props: {
   quiz: Quiz;
   index: string;
+  replaceQuiz: AppMethods["replaceQuiz"];
   addCategory: AppMethods["addCategory"];
-  changeQuizTitle: AppMethods["changeQuizTitle"];
-  changeCategoryTitle: AppMethods["changeCategoryTitle"];
+  editCategory: AppMethods["editCategory"];
   addQuestion: AppMethods["addQuestion"];
   editQuestion: AppMethods["editQuestion"];
 }) => {
@@ -35,7 +35,10 @@ export const QuizComponent = (props: {
           setNewQuizTitle(e.target.value);
         }}
         onBlur={() => {
-          props.changeQuizTitle(parseInt(props.index, 10), quizTitle);
+          props.replaceQuiz(parseInt(props.index, 10), {
+            ...quiz,
+            title: quizTitle,
+          });
         }}
       />
       <Pane>
@@ -53,7 +56,7 @@ export const QuizComponent = (props: {
             category={cat}
             catIndex={index}
             quizIndex={parseInt(props.index, 10)}
-            changeCategoryTitle={props.changeCategoryTitle}
+            editCategory={props.editCategory}
             addQuestion={props.addQuestion}
             editQuestion={props.editQuestion}
           />

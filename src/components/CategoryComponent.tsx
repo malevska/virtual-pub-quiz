@@ -11,7 +11,7 @@ export const CategoryComponent = (props: {
   category: Category;
   catIndex: number;
   quizIndex: number;
-  changeCategoryTitle: AppMethods["changeCategoryTitle"];
+  editCategory: AppMethods["editCategory"];
   addQuestion: AppMethods["addQuestion"];
   editQuestion: AppMethods["editQuestion"];
 }) => {
@@ -29,11 +29,7 @@ export const CategoryComponent = (props: {
           setCategoryTitle(e.target.value);
         }}
         onBlur={() => {
-          props.changeCategoryTitle(
-            props.quizIndex,
-            props.catIndex,
-            categoryTitle
-          );
+          props.editCategory(props.quizIndex, props.catIndex, categoryTitle);
         }}
       />
       <Button

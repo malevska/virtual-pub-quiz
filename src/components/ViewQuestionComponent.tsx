@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import { Button, Pane, TextInput, Textarea, Heading } from "evergreen-ui";
 import { Question } from "../store/types";
-import { addQuestion, editQuestion } from "../index";
 
 // Modifies a question
 export const ViewQuestionComponent = (props: {
