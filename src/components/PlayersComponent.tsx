@@ -8,17 +8,11 @@ import { PlayQuizComponent } from "./PlayQuizComponent";
 export const PlayersComponent = (props: {
   quiz: Quiz;
   index: string;
-  setPlayers: AppMethods["setPlayers"];
-  onClose: () => void;
+  onFinish: (players: string[]) => void;
 }) => {
   const quiz = props.quiz;
   const [newPlayerName, setNewPlayerName] = useState("");
   const [playersList, setPlayersList] = useState<string[]>(props.quiz.players);
-
-  const onClickHandler = () => {
-    setPlayersList([...playersList, newPlayerName]);
-    setNewPlayerName("");
-  };
 
   return (
     <Pane padding="20px">
@@ -30,7 +24,14 @@ export const PlayersComponent = (props: {
           value={newPlayerName}
           onChange={(e: any) => setNewPlayerName(e.target.value)}
         />
-        <Button onClick={onClickHandler}>Add Player</Button>
+        <Button
+          onClick={() => {
+            setPlayersList([...playersList, newPlayerName]);
+            setNewPlayerName("");
+          }}
+        >
+          Add Player
+        </Button>
         <Pane>
           {playersList.map((p, ind) => (
             <TextInput
@@ -44,8 +45,7 @@ export const PlayersComponent = (props: {
 
       <Button
         onClick={() => {
-          props.setPlayers(parseInt(props.index, 10), playersList);
-          props.onClose();
+          props.onFinish(playersList);
         }}
       >
         Play

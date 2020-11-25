@@ -65,8 +65,10 @@ export const PlayQuizComponent = (props: {
     <PlayersComponent
       quiz={props.quiz}
       index={props.qIndex}
-      setPlayers={props.setPlayers}
-      onClose={() => setShowPlayersScreen(false)}
+      onFinish={(playersList) => {
+        props.setPlayers(parseInt(props.qIndex, 10), playersList);
+        setShowPlayersScreen(false);
+      }}
     />
   ) : (
     quizPane
