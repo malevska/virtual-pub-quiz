@@ -37,7 +37,13 @@ export const PlayersComponent = (props: {
             <TextInput
               key={ind}
               defaultValue={p}
-              onBlur={(e: any) => (playersList[ind] = e.target.value)}
+              onBlur={(e: any) =>
+                setPlayersList([
+                  ...playersList.slice(0, ind),
+                  e.target.value,
+                  ...playersList.slice(ind + 1),
+                ])
+              }
             />
           ))}
         </Pane>
