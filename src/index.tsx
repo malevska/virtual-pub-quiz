@@ -17,7 +17,14 @@ import { QuizComponent } from "./components/QuizComponent";
 import { Quiz, AppMethods } from "./store/types";
 import { useQuizzes } from "./store/index";
 
-const db: Quiz[] = [];
+const db: Quiz[] = [
+  {
+    title: "TestQuiz",
+    players: ["Pero", "Mile"],
+    categories: [],
+    isPlaying: true,
+  },
+];
 
 const QuizList = ({
   quizzes,

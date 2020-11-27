@@ -7,9 +7,7 @@ import { Question } from "../store/types";
 // Modifies a question
 export const ViewQuestionComponent = (props: {
   question: Question;
-  questionIndex: number;
-  catIndex: number;
-  quizIndex: number;
+  onClose: () => void;
 }) => {
   const question = props.question;
 
@@ -25,6 +23,7 @@ export const ViewQuestionComponent = (props: {
       <Heading hidden={showAnswer} size={900} marginTop="default">
         {question.answer}
       </Heading>
+      <Button onClick={props.onClose}>Close</Button>
     </Pane>
   );
 };

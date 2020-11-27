@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Button, Pane, Pill } from "evergreen-ui";
+import { Button, Pane, Pill, Table } from "evergreen-ui";
 import { Quiz, AppMethods } from "../store/types";
 import { useState } from "react";
-import { useHistory } from "react-router";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
+import { render } from "react-dom";
 
 export const PlayQuizComponent = (props: {
   quiz: Quiz;
@@ -12,8 +12,6 @@ export const PlayQuizComponent = (props: {
   setPlayers: AppMethods["setPlayers"];
 }) => {
   const quiz = props.quiz;
-  const history = useHistory();
-
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
 
   const [indexes, setIndexes] = useState<{
@@ -46,6 +44,21 @@ export const PlayQuizComponent = (props: {
       <Button margin="5px" onClick={() => setShowPlayersScreen(true)}>
         Edit Players
       </Button>
+
+      <Table>
+        <Table.Head>
+          <Table.TextHeaderCell>Name</Table.TextHeaderCell>
+          <Table.TextHeaderCell>Score</Table.TextHeaderCell>
+        </Table.Head>
+        <Table.Body height={240}>
+          {quiz.players.map((pl, ind) => (
+            <Table.Row key={ind}>
+              <Table.TextCell>{pl}</Table.TextCell>
+              <Table.TextCell>{5}</Table.TextCell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </Pane>
   );
 
@@ -55,9 +68,7 @@ export const PlayQuizComponent = (props: {
         question={
           props.quiz.categories[indexes.catIndex].questions[indexes.quesIndex]
         }
-        catIndex={indexes.catIndex}
-        quizIndex={parseInt(props.qIndex, 10)}
-        questionIndex={indexes.quesIndex}
+        onClose={() => setIndexes({ quesIndex: -1, catIndex: -1 })}
       />
     );
 
