@@ -4,7 +4,6 @@ import { Quiz, AppMethods } from "../store/types";
 import { useState } from "react";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
-import { render } from "react-dom";
 
 export const PlayQuizComponent = (props: {
   quiz: Quiz;
@@ -18,6 +17,8 @@ export const PlayQuizComponent = (props: {
     catIndex: number;
     quesIndex: number;
   }>({ catIndex: -1, quesIndex: -1 });
+
+  //const calculateScore = (q: Quiz, index: number, points: number) => {};
 
   const quizPane = (
     <Pane padding="20px">
@@ -68,14 +69,17 @@ export const PlayQuizComponent = (props: {
         question={
           props.quiz.categories[indexes.catIndex].questions[indexes.quesIndex]
         }
-        onClose={() => setIndexes({ quesIndex: -1, catIndex: -1 })}
+        players={quiz.players}
+        onClose={(answerer: number, points: number) => {
+          //calculate
+          setIndexes({ quesIndex: -1, catIndex: -1 });
+        }}
       />
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
     <PlayersComponent
-      quiz={props.quiz}
-      index={props.qIndex}
+      quiz={quiz}
       onFinish={(playersList) => {
         props.setPlayers(parseInt(props.qIndex, 10), playersList);
         setShowPlayersScreen(false);
