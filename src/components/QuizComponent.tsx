@@ -6,7 +6,7 @@ import { Button, Pane, TextInput } from "evergreen-ui";
 import { Quiz } from "../store/types";
 
 import { CategoryComponent } from "./CategoryComponent";
-import { MethodsContext } from "src/store";
+import { MethodsContext } from "../store";
 
 // Modifies a quiz
 export const QuizComponent = (props: { quiz: Quiz; index: string }) => {

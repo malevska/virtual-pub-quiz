@@ -42,7 +42,7 @@ export const ViewQuestionComponent = (props: {
         name="text-input-name"
         value={points}
         onChange={(e: any) => {
-          setPoints(e.target.value);
+          setPoints(parseInt(e.target.value, 10));
         }}
       />
       <Button onClick={() => props.onClose(answerer, points)}>Close</Button>
