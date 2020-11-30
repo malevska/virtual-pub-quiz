@@ -1,20 +1,16 @@
 import * as React from "react";
 import { Button, Pane, Pill } from "evergreen-ui";
-import { Quiz, AppMethods } from "../store/types";
-import { useState } from "react";
-import { useHistory } from "react-router";
+import { Quiz } from "../store/types";
+import { useState, useContext } from "react";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
+import { MethodsContext } from "src/store";
 
-export const PlayQuizComponent = (props: {
-  quiz: Quiz;
-  qIndex: string;
-  setPlayers: AppMethods["setPlayers"];
-}) => {
+export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
   const quiz = props.quiz;
-  const history = useHistory();
 
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
+  const { setPlayers } = useContext(MethodsContext);
 
   const [indexes, setIndexes] = useState<{
     catIndex: number;
@@ -66,7 +62,7 @@ export const PlayQuizComponent = (props: {
       quiz={props.quiz}
       index={props.qIndex}
       onFinish={(playersList) => {
-        props.setPlayers(parseInt(props.qIndex, 10), playersList);
+        setPlayers(parseInt(props.qIndex, 10), playersList);
         setShowPlayersScreen(false);
       }}
     />
