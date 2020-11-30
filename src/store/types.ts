@@ -1,3 +1,5 @@
+import { Context } from "react";
+
 export interface Quiz {
   title: string;
   isPlaying: boolean;

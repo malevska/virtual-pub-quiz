@@ -1,5 +1,5 @@
 import { Question, Quiz, AppMethods } from "./types";
-import { useState } from "react";
+import { useState, createContext } from "react";
 
 /**
  * Our own custom hook for handling quiz state
@@ -107,3 +107,6 @@ export const useQuizzes = (initial: Quiz[]) => {
     },
   ] as [Quiz[], AppMethods];
 };
+
+/** Create an empty context which we will populate later */
+export const MethodsContext = createContext<AppMethods>(null);

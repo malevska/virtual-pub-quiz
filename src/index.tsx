@@ -15,7 +15,7 @@ import { PlayQuizComponent } from "./components/PlayQuizComponent";
 import { QuizComponent } from "./components/QuizComponent";
 
 import { Quiz, AppMethods } from "./store/types";
-import { useQuizzes } from "./store/index";
+import { useQuizzes, MethodsContext } from "./store/index";
 
 const db: Quiz[] = [
   {
@@ -26,15 +26,10 @@ const db: Quiz[] = [
   },
 ];
 
-const QuizList = ({
-  quizzes,
-  methods,
-}: {
-  quizzes: Quiz[];
-  methods: AppMethods;
-}) => {
+const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
   const history = useHistory();
   const [newQuizTitle, setNewQuizTitle] = useState("");
+  const methods = React.useContext(MethodsContext);
 
   //add a new Quiz to the list and clear the input field
   const onClickHandler = () => {
@@ -82,65 +77,41 @@ const QuizList = ({
   );
 };
 
-const QuizRoute = ({
-  quizzes,
-  methods,
-}: {
-  quizzes: Quiz[];
-  methods: AppMethods;
-}) => {
+const QuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
   let { index } = useParams<{ index: string }>();
-
-  return (
-    <QuizComponent
-      quiz={quizzes[index]}
-      index={index}
-      replaceQuiz={methods.replaceQuiz}
-      addCategory={methods.addCategory}
-      editCategory={methods.editCategory}
-      addQuestion={methods.addQuestion}
-      editQuestion={methods.editQuestion}
-    />
-  );
+  return <QuizComponent quiz={quizzes[index]} index={index} />;
 };
 
-const PlayQuizRoute = ({
-  quizzes,
-  methods,
-}: {
-  quizzes: Quiz[];
-  methods: AppMethods;
-}) => {
+const PlayQuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
   let { index } = useParams<{ index: string }>();
-  return (
-    <PlayQuizComponent
-      quiz={quizzes[index]}
-      qIndex={index}
-      setPlayers={methods.setPlayers}
-    />
-  );
+  return <PlayQuizComponent quiz={quizzes[index]} qIndex={index} />;
 };
 
+/**
+ * This is the root component that renders everything
+ */
 const App = () => {
   const [quizzes, methods] = useQuizzes(db);
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/about">NOT IMPLEMENTED</Route>
-        <Route
-          path="/quiz/:index"
-          children={<QuizRoute quizzes={quizzes} methods={methods} />}
-        />
-        <Route
-          path="/play/:index"
-          children={<PlayQuizRoute quizzes={quizzes} methods={methods} />}
-        />
-        <Route path="/">
-          <QuizList quizzes={quizzes} methods={methods} />
-        </Route>
-      </Switch>
-    </Router>
+    <MethodsContext.Provider value={methods}>
+      <Router>
+        <Switch>
+          <Route path="/about">NOT IMPLEMENTED</Route>
+          <Route
+            path="/quiz/:index"
+            children={<QuizRoute quizzes={quizzes} />}
+          />
+          <Route
+            path="/play/:index"
+            children={<PlayQuizRoute quizzes={quizzes} />}
+          />
+          <Route path="/">
+            <QuizList quizzes={quizzes} />
+          </Route>
+        </Switch>
+      </Router>
+    </MethodsContext.Provider>
   );
 };
 
