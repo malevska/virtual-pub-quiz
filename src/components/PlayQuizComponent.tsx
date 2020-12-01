@@ -34,7 +34,7 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
   const [activeQues, setActiveQues] = useState<{
     catIndex: number;
     quesIndex: number;
-  }>({ catIndex: -1, quesIndex: -1 });
+  }>(null);
 
   const quizPane = (
     <Pane padding="20px">
@@ -81,7 +81,7 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
     </Pane>
   );
 
-  if (activeQues.quesIndex !== -1)
+  if (activeQues)
     return (
       <ViewQuestionComponent
         question={
@@ -101,7 +101,7 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
             answerer,
             points
           );
-          setActiveQues({ quesIndex: -1, catIndex: -1 });
+          setActiveQues(null);
         }}
       />
     );
