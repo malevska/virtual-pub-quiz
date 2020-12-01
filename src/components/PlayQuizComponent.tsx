@@ -1,21 +1,40 @@
 import * as React from "react";
-import { Button, Pane, Pill } from "evergreen-ui";
-import { Quiz } from "../store/types";
+import { Button, Pane, Pill, Table } from "evergreen-ui";
+import { Quiz, Category } from "../store/types";
 import { useState, useContext } from "react";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
-import { MethodsContext } from "src/store";
+import { MethodsContext } from "../store";
+
+// const calculateScore = (playerIndex: number, categories: Category[]) => {
+//   const allQuestions = categories.map((cat) => cat.questions);
+//   const flatAllQuestions = allQuestions.reduce(
+//     (acc, qList) => acc.concat(qList),
+//     []
+//   );
+//   const myQuestions = flatAllQuestions.filter(
+//     (q) => q.answererIndex === playerIndex
+//   );
+//   const myPoints = myQuestions.map((q) => q.points);
+//   return myPoints.reduce((a, b) => a + b, 0);
+// };
+
+const calculateScore = (pIndex: number, cats: Category[]) =>
+  cats
+    .flatMap((cat) => cat.questions)
+    .filter((q) => q.answererIndex === pIndex && q.awardedPoints)
+    .map((q) => q.awardedPoints)
+    .reduce((a, b) => a + b, 0);
 
 export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
   const quiz = props.quiz;
-
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
-  const { setPlayers } = useContext(MethodsContext);
+  const { setPlayers, editQuestion } = useContext(MethodsContext);
 
-  const [indexes, setIndexes] = useState<{
+  const [activeQues, setActiveQues] = useState<{
     catIndex: number;
     quesIndex: number;
-  }>({ catIndex: -1, quesIndex: -1 });
+  }>(null);
 
   const quizPane = (
     <Pane padding="20px">
@@ -28,7 +47,7 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
               margin="5px"
               isInteractive={true}
               onClick={() => {
-                setIndexes({
+                setActiveQues({
                   quesIndex: quesInd,
                   catIndex: catInd,
                 });
@@ -42,25 +61,54 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
       <Button margin="5px" onClick={() => setShowPlayersScreen(true)}>
         Edit Players
       </Button>
+
+      <Table>
+        <Table.Head>
+          <Table.TextHeaderCell>Name</Table.TextHeaderCell>
+          <Table.TextHeaderCell>Score</Table.TextHeaderCell>
+        </Table.Head>
+        <Table.Body height={240}>
+          {quiz.players.map((pl, ind) => (
+            <Table.Row key={ind}>
+              <Table.TextCell>{pl}</Table.TextCell>
+              <Table.TextCell>
+                {calculateScore(ind, quiz.categories)}
+              </Table.TextCell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </Pane>
   );
 
-  if (indexes.quesIndex !== -1)
+  if (activeQues)
     return (
       <ViewQuestionComponent
         question={
-          props.quiz.categories[indexes.catIndex].questions[indexes.quesIndex]
+          props.quiz.categories[activeQues.catIndex].questions[
+            activeQues.quesIndex
+          ]
         }
-        catIndex={indexes.catIndex}
-        quizIndex={parseInt(props.qIndex, 10)}
-        questionIndex={indexes.quesIndex}
+        players={quiz.players}
+        onClose={(answerer: number, points: number) => {
+          editQuestion(
+            parseInt(props.qIndex, 10),
+            activeQues.catIndex,
+            activeQues.quesIndex,
+            quiz.categories[activeQues.catIndex].questions[
+              activeQues.quesIndex
+            ],
+            answerer,
+            points
+          );
+          setActiveQues(null);
+        }}
       />
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
     <PlayersComponent
-      quiz={props.quiz}
-      index={props.qIndex}
+      quiz={quiz}
       onFinish={(playersList) => {
         setPlayers(parseInt(props.qIndex, 10), playersList);
         setShowPlayersScreen(false);

@@ -7,7 +7,6 @@ import { PlayQuizComponent } from "./PlayQuizComponent";
 // Modifies the players list
 export const PlayersComponent = (props: {
   quiz: Quiz;
-  index: string;
   onFinish: (players: string[]) => void;
 }) => {
   const quiz = props.quiz;

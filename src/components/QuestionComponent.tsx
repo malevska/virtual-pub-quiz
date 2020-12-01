@@ -21,7 +21,7 @@ export const QuestionComponent = (props: {
   const [questionText, setQuestionText] = useState(question.text);
   const [answer, setAnswer] = useState(question.answer);
   const [embeds, setEmbeds] = useState(question.embeds);
-  const [points, setPoints] = useState(question.points);
+  const [points, setPoints] = useState<number>(question.points);
 
   const pane = (
     <Pane padding="20px">
@@ -44,7 +44,7 @@ export const QuestionComponent = (props: {
         type={"number"}
         value={points}
         onChange={(e: any) => {
-          setPoints(e.target.value);
+          setPoints(parseInt(e.target.value, 10));
         }}
       />
     </Pane>

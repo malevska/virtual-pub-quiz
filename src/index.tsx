@@ -17,7 +17,62 @@ import { QuizComponent } from "./components/QuizComponent";
 import { Quiz, AppMethods } from "./store/types";
 import { useQuizzes, MethodsContext } from "./store/index";
 
-const db: Quiz[] = [];
+const db: Quiz[] = [
+  {
+    title: "TestQuiz",
+    players: ["Pero", "Mile"],
+    categories: [
+      {
+        title: "Cat 1",
+        questions: [
+          {
+            text: "Banana",
+            answer: "Yellow",
+            embeds: "",
+            points: 5,
+          },
+          {
+            text: "Apple",
+            answer: "Red",
+            embeds: "",
+            points: 4,
+          },
+          {
+            text: "Grapes",
+            answer: "Purple",
+            embeds: "",
+            points: 3,
+          },
+        ],
+      },
+
+      {
+        title: "Cat 2",
+        questions: [
+          {
+            text: "Lemon",
+            answer: "Yellow",
+            embeds: "",
+            points: 5,
+          },
+          {
+            text: "Kiwi",
+            answer: "Green",
+            embeds: "",
+            points: 4,
+          },
+          {
+            text: "Orange",
+            answer: "Orange",
+            embeds: "",
+            points: 3,
+          },
+        ],
+      },
+    ],
+    isPlaying: true,
+  },
+];
 
 const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
   const history = useHistory();
