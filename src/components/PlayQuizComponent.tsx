@@ -22,8 +22,8 @@ import { MethodsContext } from "../store";
 const calculateScore = (pIndex: number, cats: Category[]) =>
   cats
     .flatMap((cat) => cat.questions)
-    .filter((q) => q.answererIndex === pIndex)
-    .map((q) => q.points)
+    .filter((q) => q.answererIndex === pIndex && q.awardedPoints)
+    .map((q) => q.awardedPoints)
     .reduce((a, b) => a + b, 0);
 
 export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {

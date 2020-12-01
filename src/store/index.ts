@@ -66,7 +66,7 @@ export const useQuizzes = (initial: Quiz[]) => {
     questIndex: number,
     newQuestion: Question,
     answerer?: number,
-    points?: number
+    awardedPoints?: number
   ) => {
     const quiz = quizzes[qIndex];
     const cat = quizzes[qIndex].categories[cIndex];
@@ -78,7 +78,11 @@ export const useQuizzes = (initial: Quiz[]) => {
           ...cat,
           questions: [
             ...cat.questions.slice(0, questIndex),
-            { ...newQuestion, answererIndex: answerer, awardedPoints: points },
+            {
+              ...newQuestion,
+              answererIndex: answerer,
+              awardedPoints: awardedPoints,
+            },
             ...cat.questions.slice(questIndex + 1),
           ],
         },

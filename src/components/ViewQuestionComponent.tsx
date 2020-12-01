@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { Button, Pane, TextInput, Heading, Table } from "evergreen-ui";
+import { Button, Pane, TextInput, Heading, Table, Radio } from "evergreen-ui";
 import { Question } from "../store/types";
 
 // Modifies a question
@@ -25,18 +25,14 @@ export const ViewQuestionComponent = (props: {
       <Heading hidden={showAnswer} size={900} marginTop="default">
         {question.answer}
       </Heading>
-      <Table>
-        <Table.Head>
-          <Table.SearchHeaderCell />
-        </Table.Head>
-        <Table.Body height={240}>
-          {props.players.map((pl, ind) => (
-            <Table.Row key={ind} isSelectable onSelect={() => setAnswerer(ind)}>
-              <Table.TextCell>{pl}</Table.TextCell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+
+      <Pane role="players">
+        {props.players.map((pl, ind) => {
+          return (
+            <Radio name="players" label={pl} onClick={() => setAnswerer(ind)} />
+          );
+        })}
+      </Pane>
 
       <TextInput
         name="text-input-name"
