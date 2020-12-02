@@ -1,11 +1,19 @@
 import * as React from "react";
-import { useState } from "react";
-
-import { Button, Pane, TextInput, Textarea, Dialog } from "evergreen-ui";
-import { Question, AppMethods } from "../store/types";
+import { useState, useContext } from "react";
+import { Pane, TextInput, Textarea, Dialog } from "evergreen-ui";
+import { Question } from "../store/types";
+import { MethodsContext } from "../store";
 
 // Modifies a question
-export const QuestionComponent = (props: {
+export const QuestionComponent = ({
+  question,
+  questionIndex,
+  catIndex,
+  quizIndex,
+  mode,
+  dialog,
+  onClose,
+}: {
   question: Question;
   questionIndex: number;
   catIndex: number;
@@ -13,15 +21,13 @@ export const QuestionComponent = (props: {
   mode: string;
   dialog: boolean;
   onClose?: () => void;
-  addQuiestion: AppMethods["addQuestion"];
-  editQuestion: AppMethods["editQuestion"];
 }) => {
-  const question = props.question;
-
   const [questionText, setQuestionText] = useState(question.text);
   const [answer, setAnswer] = useState(question.answer);
   const [embeds, setEmbeds] = useState(question.embeds);
   const [points, setPoints] = useState<number>(question.points);
+
+  const { addQuestion, editQuestion } = useContext(MethodsContext);
 
   const pane = (
     <Pane padding="20px">
@@ -50,32 +56,27 @@ export const QuestionComponent = (props: {
     </Pane>
   );
 
-  return props.dialog ? (
+  return dialog ? (
     <Dialog
       isShown={true}
       title="Question"
       width={"800px"}
       shouldCloseOnOverlayClick={false}
       onCloseComplete={() => {
-        props.onClose();
-        props.mode === "add"
-          ? props.addQuiestion(props.quizIndex, props.catIndex, {
+        onClose();
+        mode === "add"
+          ? addQuestion(quizIndex, catIndex, {
               text: questionText,
               answer: answer,
               embeds: embeds,
               points: points,
             })
-          : props.editQuestion(
-              props.quizIndex,
-              props.catIndex,
-              props.questionIndex,
-              {
-                text: questionText,
-                answer: answer,
-                embeds: embeds,
-                points: points,
-              }
-            );
+          : editQuestion(quizIndex, catIndex, questionIndex, {
+              text: questionText,
+              answer: answer,
+              embeds: embeds,
+              points: points,
+            });
       }}
     >
       {pane}

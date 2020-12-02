@@ -5,13 +5,15 @@ import { Quiz, AppMethods } from "../store/types";
 import { PlayQuizComponent } from "./PlayQuizComponent";
 
 // Modifies the players list
-export const PlayersComponent = (props: {
+export const PlayersComponent = ({
+  quiz,
+  onFinish,
+}: {
   quiz: Quiz;
   onFinish: (players: string[]) => void;
 }) => {
-  const quiz = props.quiz;
   const [newPlayerName, setNewPlayerName] = useState("");
-  const [playersList, setPlayersList] = useState<string[]>(props.quiz.players);
+  const [playersList, setPlayersList] = useState<string[]>(quiz.players);
 
   return (
     <Pane padding="20px">
@@ -50,7 +52,7 @@ export const PlayersComponent = (props: {
 
       <Button
         onClick={() => {
-          props.onFinish(playersList);
+          onFinish(playersList);
         }}
       >
         Play

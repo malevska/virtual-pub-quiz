@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { Button, Pane, TextInput, Heading, Table, Radio } from "evergreen-ui";
+import { Button, Pane, TextInput, Heading, Radio } from "evergreen-ui";
 import { Question } from "../store/types";
 
-// Modifies a question
+//Shows the question and the list of players that may answer it
 export const ViewQuestionComponent = (props: {
   question: Question;
   players: string[];
@@ -35,13 +35,12 @@ export const ViewQuestionComponent = (props: {
       </Pane>
 
       <TextInput
-        name="text-input-name"
         value={points}
         onChange={(e: any) => {
           setPoints(parseInt(e.target.value, 10));
         }}
       />
-      <Button onClick={() => props.onClose(answerer, points)}>Close</Button>
+      <Button onClick={() => props.onClose(answerer, points)}>OK</Button>
     </Pane>
   );
 };

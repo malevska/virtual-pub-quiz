@@ -1,25 +1,25 @@
 import * as React from "react";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
-import { Category, AppMethods } from "../store/types";
-
+import { Category } from "../store/types";
 import { QuestionComponent } from "./QuestionComponent";
+import { MethodsContext } from "../store";
 
 // Modifies a categry
-export const CategoryComponent = (props: {
+export const CategoryComponent = ({
+  category,
+  catIndex,
+  quizIndex,
+}: {
   category: Category;
   catIndex: number;
   quizIndex: number;
-  editCategory: AppMethods["editCategory"];
-  addQuestion: AppMethods["addQuestion"];
-  editQuestion: AppMethods["editQuestion"];
 }) => {
-  const category = props.category;
   const [categoryTitle, setCategoryTitle] = useState(category.title);
   const [dialogIsShown, setDialogIsShown] = useState<boolean>(false);
   const [qIndex, setQIndex] = useState<number>(-1);
   const [qmode, setQMode] = useState("add");
+  const { editCategory } = useContext(MethodsContext);
 
   return (
     <Pane padding="20px">
@@ -29,7 +29,7 @@ export const CategoryComponent = (props: {
           setCategoryTitle(e.target.value);
         }}
         onBlur={() => {
-          props.editCategory(props.quizIndex, props.catIndex, categoryTitle);
+          editCategory(quizIndex, catIndex, categoryTitle);
         }}
       />
       <Button
@@ -65,18 +65,16 @@ export const CategoryComponent = (props: {
           question={
             qmode === "add"
               ? { text: "", answer: "", embeds: "", points: 0 }
-              : props.category.questions[qIndex]
+              : category.questions[qIndex]
           }
-          catIndex={props.catIndex}
-          quizIndex={props.quizIndex}
+          catIndex={catIndex}
+          quizIndex={quizIndex}
           questionIndex={qIndex}
           mode={qmode}
           dialog={true}
           onClose={() => {
             setDialogIsShown(false);
           }}
-          addQuiestion={props.addQuestion}
-          editQuestion={props.editQuestion}
         />
       ) : null}
     </Pane>
