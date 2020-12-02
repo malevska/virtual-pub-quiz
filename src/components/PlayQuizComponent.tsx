@@ -5,6 +5,7 @@ import { useState, useContext } from "react";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
 import { MethodsContext } from "../store";
+import { Link } from "react-router-dom";
 
 // const calculateScore = (playerIndex: number, categories: Category[]) => {
 //   const allQuestions = categories.map((cat) => cat.questions);
@@ -83,6 +84,7 @@ export const PlayQuizComponent = ({
           ))}
         </Table.Body>
       </Table>
+      <Link to="/">Back to All Quizzes</Link>
     </Pane>
   );
 

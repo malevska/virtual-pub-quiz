@@ -7,14 +7,12 @@ import {
   Route,
   useParams,
   useHistory,
+  Link,
 } from "react-router-dom";
-
 import { Button, Pane, TextInput } from "evergreen-ui";
-
 import { PlayQuizComponent } from "./components/PlayQuizComponent";
 import { QuizComponent } from "./components/QuizComponent";
-
-import { Quiz, AppMethods } from "./store/types";
+import { Quiz } from "./store/types";
 import { useQuizzes, MethodsContext } from "./store/index";
 
 const db: Quiz[] = [
@@ -75,15 +73,8 @@ const db: Quiz[] = [
 ];
 
 const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
-  const history = useHistory();
   const [newQuizTitle, setNewQuizTitle] = useState("");
   const methods = React.useContext(MethodsContext);
-
-  //add a new Quiz to the list and clear the input field
-  const onClickHandler = () => {
-    methods.addQuiz(newQuizTitle);
-    setNewQuizTitle("");
-  };
 
   return (
     <Pane padding="20px">
@@ -93,7 +84,13 @@ const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
         onChange={(e: any) => setNewQuizTitle(e.target.value)}
       />
 
-      <Button appearance="primary" onClick={onClickHandler}>
+      <Button
+        appearance="primary"
+        onClick={() => {
+          methods.addQuiz(newQuizTitle);
+          setNewQuizTitle("");
+        }}
+      >
         Add New Quiz
       </Button>
 
@@ -101,18 +98,15 @@ const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
       {quizzes.map((q, index) => (
         <h2 key={index}>
           {q.title} ({q.isPlaying ? "P" : "/"}) -
-          <Button margin="5px" onClick={() => history.push(`/quiz/${index}`)}>
-            Edit
-          </Button>
-          <Button
-            margin="5px"
+          <Link to={`/edit/${index}`}>Edit</Link>
+          <Link
+            to={`/play/${index}`}
             onClick={() => {
-              history.push(`/play/${index}`);
               methods.startQuiz(index, true);
             }}
           >
             Play
-          </Button>
+          </Link>
           <Button margin="5px" onClick={() => methods.startQuiz(index, false)}>
             Reset
           </Button>
@@ -141,13 +135,17 @@ const PlayQuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
 const App = () => {
   const [quizzes, methods] = useQuizzes(db);
 
+  console.log(methods);
+  if (!methods) {
+    debugger;
+  }
   return (
     <MethodsContext.Provider value={methods}>
       <Router>
         <Switch>
           <Route path="/about">NOT IMPLEMENTED</Route>
           <Route
-            path="/quiz/:index"
+            path="/edit/:index"
             children={<QuizRoute quizzes={quizzes} />}
           />
           <Route
