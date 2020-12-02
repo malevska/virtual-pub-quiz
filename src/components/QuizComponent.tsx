@@ -9,17 +9,16 @@ import { CategoryComponent } from "./CategoryComponent";
 import { MethodsContext } from "../store";
 
 // Modifies a quiz
-export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
-  const quiz = props.quiz;
-
+export const QuizComponent = ({
+  quiz,
+  qIndex,
+}: {
+  quiz: Quiz;
+  qIndex: string;
+}) => {
   const [quizTitle, setNewQuizTitle] = useState(quiz.title);
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
   const methods = useContext(MethodsContext);
-
-  const onClickHandler = () => {
-    methods.addCategory(parseInt(props.index, 10), newCategoryTitle);
-    setNewCategoryTitle("");
-  };
 
   return (
     <Pane padding="20px">
@@ -29,7 +28,7 @@ export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
           setNewQuizTitle(e.target.value);
         }}
         onBlur={() => {
-          methods.replaceQuiz(parseInt(props.index, 10), {
+          methods.replaceQuiz(parseInt(qIndex, 10), {
             ...quiz,
             title: quizTitle,
           });
@@ -41,7 +40,14 @@ export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
           value={newCategoryTitle}
           onChange={(e: any) => setNewCategoryTitle(e.target.value)}
         />
-        <Button onClick={onClickHandler}>Add New Category</Button>
+        <Button
+          onClick={() => {
+            methods.addCategory(parseInt(qIndex, 10), newCategoryTitle);
+            setNewCategoryTitle("");
+          }}
+        >
+          Add New Category
+        </Button>
         <h1>All Categories</h1>
 
         {quiz.categories.map((cat, index) => (
@@ -49,10 +55,7 @@ export const QuizComponent = (props: { quiz: Quiz; index: string }) => {
             key={index}
             category={cat}
             catIndex={index}
-            quizIndex={parseInt(props.index, 10)}
-            editCategory={methods.editCategory}
-            addQuestion={methods.addQuestion}
-            editQuestion={methods.editQuestion}
+            quizIndex={parseInt(qIndex, 10)}
           />
         ))}
 

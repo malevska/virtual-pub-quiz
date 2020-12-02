@@ -26,8 +26,13 @@ const calculateScore = (pIndex: number, cats: Category[]) =>
     .map((q) => q.awardedPoints)
     .reduce((a, b) => a + b, 0);
 
-export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
-  const quiz = props.quiz;
+export const PlayQuizComponent = ({
+  quiz,
+  qIndex,
+}: {
+  quiz: Quiz;
+  qIndex: string;
+}) => {
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
   const { setPlayers, editQuestion } = useContext(MethodsContext);
 
@@ -85,14 +90,12 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
     return (
       <ViewQuestionComponent
         question={
-          props.quiz.categories[activeQues.catIndex].questions[
-            activeQues.quesIndex
-          ]
+          quiz.categories[activeQues.catIndex].questions[activeQues.quesIndex]
         }
         players={quiz.players}
         onClose={(answerer: number, points: number) => {
           editQuestion(
-            parseInt(props.qIndex, 10),
+            parseInt(qIndex, 10),
             activeQues.catIndex,
             activeQues.quesIndex,
             quiz.categories[activeQues.catIndex].questions[
@@ -110,7 +113,7 @@ export const PlayQuizComponent = (props: { quiz: Quiz; qIndex: string }) => {
     <PlayersComponent
       quiz={quiz}
       onFinish={(playersList) => {
-        setPlayers(parseInt(props.qIndex, 10), playersList);
+        setPlayers(parseInt(qIndex, 10), playersList);
         setShowPlayersScreen(false);
       }}
     />

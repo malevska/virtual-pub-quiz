@@ -127,7 +127,7 @@ const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
 
 const QuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
   let { index } = useParams<{ index: string }>();
-  return <QuizComponent quiz={quizzes[index]} index={index} />;
+  return <QuizComponent quiz={quizzes[index]} qIndex={index} />;
 };
 
 const PlayQuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
