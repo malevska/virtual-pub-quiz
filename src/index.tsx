@@ -135,10 +135,10 @@ const PlayQuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
 const App = () => {
   const [quizzes, methods] = useQuizzes(db);
 
-  console.log(methods);
-  if (!methods) {
-    debugger;
-  }
+  // console.log(methods);
+  // if (!methods) {
+  //   debugger;
+  // }
   return (
     <MethodsContext.Provider value={methods}>
       <Router>
