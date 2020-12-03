@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useState, useContext } from "react";
-
+import { Link } from "react-router-dom";
 import { Button, Pane, TextInput } from "evergreen-ui";
-
 import { Quiz } from "../store/types";
-
 import { CategoryComponent } from "./CategoryComponent";
 import { MethodsContext } from "../store";
 
@@ -59,7 +57,7 @@ export const QuizComponent = ({
           />
         ))}
 
-        {/* <a href="/">Back to Quizzes</a> */}
+        <Link to="/">Back to All Quizzes</Link>
       </Pane>
     </Pane>
   );
