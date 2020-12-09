@@ -26,18 +26,21 @@ const db: Quiz[] = [
           {
             text: "Banana",
             answer: "Yellow",
+            embedsType: "none",
             embeds: "",
             points: 5,
           },
           {
             text: "Apple",
             answer: "Red",
+            embedsType: "none",
             embeds: "",
             points: 4,
           },
           {
             text: "Grapes",
             answer: "Purple",
+            embedsType: "none",
             embeds: "",
             points: 3,
           },
@@ -50,18 +53,21 @@ const db: Quiz[] = [
           {
             text: "Lemon",
             answer: "Yellow",
+            embedsType: "none",
             embeds: "",
             points: 5,
           },
           {
             text: "Kiwi",
             answer: "Green",
+            embedsType: "none",
             embeds: "",
             points: 4,
           },
           {
             text: "Orange",
             answer: "Orange",
+            embedsType: "none",
             embeds: "",
             points: 3,
           },
@@ -135,10 +141,6 @@ const PlayQuizRoute = ({ quizzes }: { quizzes: Quiz[] }) => {
 const App = () => {
   const [quizzes, methods] = useQuizzes(db);
 
-  // console.log(methods);
-  // if (!methods) {
-  //   debugger;
-  // }
   return (
     <MethodsContext.Provider value={methods}>
       <Router>

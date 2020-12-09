@@ -15,6 +15,7 @@ export interface Category {
 export interface Question {
   text: string;
   answer: string;
+  embedsType: EmbedsType;
   embeds: string;
   points: number;
 
@@ -40,3 +41,5 @@ export type AppMethods = {
   ) => void;
   setPlayers: (qIndex: number, playersList: string[]) => void;
 };
+
+export type EmbedsType = "none" | "photo" | "video";

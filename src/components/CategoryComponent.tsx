@@ -64,7 +64,13 @@ export const CategoryComponent = ({
         <QuestionComponent
           question={
             qmode === "add"
-              ? { text: "", answer: "", embeds: "", points: 0 }
+              ? {
+                  text: "",
+                  answer: "",
+                  embedsType: "none",
+                  embeds: "",
+                  points: 0,
+                }
               : category.questions[qIndex]
           }
           catIndex={catIndex}

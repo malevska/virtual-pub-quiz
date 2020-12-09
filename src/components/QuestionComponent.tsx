@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useContext } from "react";
-import { Pane, TextInput, Textarea, Dialog } from "evergreen-ui";
+import { Pane, TextInput, Textarea, Dialog, RadioGroup } from "evergreen-ui";
 import { Question } from "../store/types";
 import { MethodsContext } from "../store";
 
@@ -24,10 +24,17 @@ export const QuestionComponent = ({
 }) => {
   const [questionText, setQuestionText] = useState(question.text);
   const [answer, setAnswer] = useState(question.answer);
+  const [embedsType, setEmbedsType] = useState(question.embedsType);
   const [embeds, setEmbeds] = useState(question.embeds);
   const [points, setPoints] = useState<number>(question.points);
 
   const { addQuestion, editQuestion } = useContext(MethodsContext);
+
+  const options: any = [
+    { label: "None", value: "none" },
+    { label: "Photo", value: "photo" },
+    { label: "Video", value: "video" },
+  ];
 
   const pane = (
     <Pane padding="20px">
@@ -40,6 +47,12 @@ export const QuestionComponent = ({
         value={answer}
         placeholder="Answer"
         onChange={(e: any) => setAnswer(e.target.value)}
+      />
+      <RadioGroup
+        label=""
+        value={embedsType}
+        options={options}
+        onChange={(e: any) => setEmbedsType(e.target.value)}
       />
       <Textarea
         value={embeds}
@@ -68,12 +81,14 @@ export const QuestionComponent = ({
           ? addQuestion(quizIndex, catIndex, {
               text: questionText,
               answer: answer,
+              embedsType: embedsType,
               embeds: embeds,
               points: points,
             })
           : editQuestion(quizIndex, catIndex, questionIndex, {
               text: questionText,
               answer: answer,
+              embedsType: embedsType,
               embeds: embeds,
               points: points,
             });
