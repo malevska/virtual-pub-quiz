@@ -8,6 +8,7 @@ import {
   Heading,
   majorScale,
   minorScale,
+  Dialog,
 } from "evergreen-ui";
 import { Quiz, Category } from "../store/types";
 import { useState, useContext } from "react";
@@ -43,6 +44,7 @@ export const PlayQuizComponent = ({
   qIndex: string;
 }) => {
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
+  const [showScoreBoard, setShowScoreBoard] = useState<boolean>(false);
   const { setPlayers, editQuestion } = useContext(MethodsContext);
 
   const [activeQues, setActiveQues] = useState<{
@@ -62,10 +64,10 @@ export const PlayQuizComponent = ({
       <Pane width="100%" display="flex" flexDirection="row" flex="1 0 auto">
         <Heading
           is="h1"
-          width="70%"
+          width="80%"
           marginTop={majorScale(11)}
           marginBottom={majorScale(5)}
-          marginLeft={majorScale(6)}
+          marginLeft={majorScale(7)}
           size={900}
           textTransform="uppercase"
           fontSize="xxx-large"
@@ -73,7 +75,25 @@ export const PlayQuizComponent = ({
         >
           Pub quiz board
         </Heading>
-        <Table width="30%" padding={majorScale(2)} marginRight={majorScale(6)}>
+        <Pill
+          marginTop={majorScale(11)}
+          marginBottom={majorScale(5)}
+          marginRight={majorScale(7)}
+          padding={majorScale(1)}
+          isInteractive={true}
+          width="20%"
+          height={majorScale(7)}
+          background="#999999"
+          isSolid
+          fontSize="x-large"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={() => setShowScoreBoard(true)}
+        >
+          Score board
+        </Pill>
+        {/* <Table width="30%" padding={majorScale(2)} marginRight={majorScale(6)}>
           <Table.Head>
             <Table.TextHeaderCell>Name</Table.TextHeaderCell>
             <Table.TextHeaderCell>Score</Table.TextHeaderCell>
@@ -88,7 +108,7 @@ export const PlayQuizComponent = ({
               </Table.Row>
             ))}
           </Table.Body>
-        </Table>
+        </Table> */}
       </Pane>
 
       <Pane
@@ -187,6 +207,36 @@ export const PlayQuizComponent = ({
           setActiveQues(null);
         }}
       />
+    );
+
+  if (showScoreBoard)
+    return (
+      <Dialog
+        isShown={true}
+        title="Score Board"
+        width="50%"
+        shouldCloseOnOverlayClick={false}
+        onCloseComplete={() => {
+          setShowScoreBoard(false);
+        }}
+      >
+        <Table padding={majorScale(2)} marginRight={majorScale(6)}>
+          <Table.Head>
+            <Table.TextHeaderCell>Name</Table.TextHeaderCell>
+            <Table.TextHeaderCell>Score</Table.TextHeaderCell>
+          </Table.Head>
+          <Table.Body height={240}>
+            {quiz.players.map((pl, ind) => (
+              <Table.Row key={ind}>
+                <Table.TextCell>{pl}</Table.TextCell>
+                <Table.TextCell>
+                  {calculateScore(ind, quiz.categories)}
+                </Table.TextCell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </Dialog>
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
