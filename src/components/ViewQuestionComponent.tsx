@@ -24,9 +24,8 @@ export const ViewQuestionComponent = ({
       <Heading size={900} marginTop="default">
         {question.text}
       </Heading>
-      {question.embedsType === "none" ? (
-        ""
-      ) : question.embedsType === "photo" ? (
+      {question.embedsType === "none" ? null : question.embedsType ===
+        "photo" ? (
         <img src={question.embeds}></img>
       ) : (
         <ReactPlayer url={question.embeds} />
