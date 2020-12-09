@@ -21,7 +21,7 @@ const db: Quiz[] = [
     players: ["Pero", "Mile"],
     categories: [
       {
-        title: "Cat 1",
+        title: "H4 Random",
         questions: [
           {
             text: "Banana",
@@ -48,7 +48,8 @@ const db: Quiz[] = [
       },
 
       {
-        title: "Cat 2",
+        title:
+          "European geography otorinolaringologot izvrsi otorinolaringoloskipregled12345",
         questions: [
           {
             text: "Lemon",
