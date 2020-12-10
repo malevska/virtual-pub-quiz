@@ -93,22 +93,6 @@ export const PlayQuizComponent = ({
         >
           Score board
         </Pill>
-        {/* <Table width="30%" padding={majorScale(2)} marginRight={majorScale(6)}>
-          <Table.Head>
-            <Table.TextHeaderCell>Name</Table.TextHeaderCell>
-            <Table.TextHeaderCell>Score</Table.TextHeaderCell>
-          </Table.Head>
-          <Table.Body height={240}>
-            {quiz.players.map((pl, ind) => (
-              <Table.Row key={ind}>
-                <Table.TextCell>{pl}</Table.TextCell>
-                <Table.TextCell>
-                  {calculateScore(ind, quiz.categories)}
-                </Table.TextCell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table> */}
       </Pane>
 
       <Pane
@@ -124,7 +108,6 @@ export const PlayQuizComponent = ({
             key={catInd}
             padding={majorScale(1)}
             margin={majorScale(2)}
-            //  width={majorScale(30)}
             width="15%"
             background="white"
             borderRadius={minorScale(3)}
@@ -213,29 +196,42 @@ export const PlayQuizComponent = ({
     return (
       <Dialog
         isShown={true}
-        title="Score Board"
-        width="50%"
-        shouldCloseOnOverlayClick={false}
+        title="Score board"
+        width="30%"
+        shouldCloseOnOverlayClick={true}
+        hasFooter={false}
         onCloseComplete={() => {
           setShowScoreBoard(false);
         }}
       >
-        <Table padding={majorScale(2)} marginRight={majorScale(6)}>
-          <Table.Head>
-            <Table.TextHeaderCell>Name</Table.TextHeaderCell>
-            <Table.TextHeaderCell>Score</Table.TextHeaderCell>
-          </Table.Head>
-          <Table.Body height={240}>
-            {quiz.players.map((pl, ind) => (
-              <Table.Row key={ind}>
-                <Table.TextCell>{pl}</Table.TextCell>
-                <Table.TextCell>
-                  {calculateScore(ind, quiz.categories)}
-                </Table.TextCell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+        <Pane width="100%">
+          <Table>
+            <Table.Head
+              fontWeight="bold"
+              fontSize="xx-large"
+              background="white"
+            >
+              <Table.TextHeaderCell textProps={{ size: 600 }}>
+                Name
+              </Table.TextHeaderCell>
+              <Table.TextHeaderCell textProps={{ size: 600 }}>
+                Score
+              </Table.TextHeaderCell>
+            </Table.Head>
+            <Table.Body height="100%">
+              {quiz.players.map((pl, ind) => (
+                <Table.Row key={ind} borderBottom="0px">
+                  <Table.TextCell textProps={{ size: 500 }}>
+                    {pl}
+                  </Table.TextCell>
+                  <Table.TextCell textProps={{ size: 500 }}>
+                    {calculateScore(ind, quiz.categories)}
+                  </Table.TextCell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </Pane>
       </Dialog>
     );
 
