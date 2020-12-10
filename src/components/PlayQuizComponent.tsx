@@ -4,7 +4,6 @@ import {
   Pane,
   Pill,
   Table,
-  Link,
   Heading,
   majorScale,
   minorScale,
@@ -15,6 +14,7 @@ import { useState, useContext } from "react";
 import { PlayersComponent } from "./PlayersComponent";
 import { ViewQuestionComponent } from "./ViewQuestionComponent";
 import { MethodsContext } from "../store";
+import { Link } from "react-router-dom";
 
 // const calculateScore = (playerIndex: number, categories: Category[]) => {
 //   const allQuestions = categories.map((cat) => cat.questions);
@@ -55,13 +55,51 @@ export const PlayQuizComponent = ({
   const quizPane = (
     <Pane
       padding={majorScale(1)}
-      background="#F2F1F3"
       display="flex"
       flexDirection="column"
       justifyContent="center"
       flex="1 0 auto"
     >
       <Pane width="100%" display="flex" flexDirection="row" flex="1 0 auto">
+        <Dialog
+          isShown={showScoreBoard}
+          title="Score board"
+          width="30%"
+          shouldCloseOnOverlayClick={false}
+          hasFooter={false}
+          onCloseComplete={() => {
+            setShowScoreBoard(false);
+          }}
+        >
+          <Pane width="100%">
+            <Table>
+              <Table.Head
+                fontWeight="bold"
+                fontSize="xx-large"
+                background="white"
+              >
+                <Table.TextHeaderCell textProps={{ size: 600 }}>
+                  Name
+                </Table.TextHeaderCell>
+                <Table.TextHeaderCell textProps={{ size: 600 }}>
+                  Score
+                </Table.TextHeaderCell>
+              </Table.Head>
+              <Table.Body height="100%">
+                {quiz.players.map((pl, ind) => (
+                  <Table.Row key={ind} borderBottom="0px">
+                    <Table.TextCell textProps={{ size: 500 }}>
+                      {pl}
+                    </Table.TextCell>
+                    <Table.TextCell textProps={{ size: 500 }}>
+                      {calculateScore(ind, quiz.categories)}
+                    </Table.TextCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Pane>
+        </Dialog>
         <Heading
           is="h1"
           width="80%"
@@ -81,11 +119,11 @@ export const PlayQuizComponent = ({
           marginRight={majorScale(7)}
           padding={majorScale(1)}
           isInteractive={true}
-          width="20%"
+          width="18%"
           height={majorScale(7)}
           background="#999999"
           isSolid
-          fontSize="x-large"
+          fontSize="1.5vw"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -96,7 +134,6 @@ export const PlayQuizComponent = ({
       </Pane>
 
       <Pane
-        marginLeft={majorScale(6)}
         display="flex"
         flexDirection="row"
         justifyContent="center"
@@ -107,8 +144,8 @@ export const PlayQuizComponent = ({
           <Pane
             key={catInd}
             padding={majorScale(1)}
-            margin={majorScale(2)}
-            width="15%"
+            margin="1%"
+            width="17%"
             background="white"
             borderRadius={minorScale(3)}
             display="flex"
@@ -136,7 +173,7 @@ export const PlayQuizComponent = ({
                 margin={majorScale(1)}
                 padding={majorScale(1)}
                 isInteractive={true}
-                width={majorScale(20)}
+                width="70%"
                 height={majorScale(7)}
                 background="#999999"
                 isSolid
@@ -158,13 +195,15 @@ export const PlayQuizComponent = ({
         ))}
       </Pane>
 
-      <Pane>
-        <Link margin={majorScale(2)} onClick={() => setShowPlayersScreen(true)}>
-          Edit Players
-        </Link>
-        <Link margin={majorScale(2)} href="/">
-          Back to All Quizzes
-        </Link>
+      <Pane display="flex">
+        <Heading is="h3" margin={majorScale(1)}>
+          <Link to="#" onClick={() => setShowPlayersScreen(true)}>
+            Edit Players
+          </Link>
+        </Heading>
+        <Heading is="h3" margin={majorScale(1)}>
+          <Link to="/">Back to All Quizzes</Link>
+        </Heading>
       </Pane>
     </Pane>
   );
@@ -190,49 +229,6 @@ export const PlayQuizComponent = ({
           setActiveQues(null);
         }}
       />
-    );
-
-  if (showScoreBoard)
-    return (
-      <Dialog
-        isShown={true}
-        title="Score board"
-        width="30%"
-        shouldCloseOnOverlayClick={true}
-        hasFooter={false}
-        onCloseComplete={() => {
-          setShowScoreBoard(false);
-        }}
-      >
-        <Pane width="100%">
-          <Table>
-            <Table.Head
-              fontWeight="bold"
-              fontSize="xx-large"
-              background="white"
-            >
-              <Table.TextHeaderCell textProps={{ size: 600 }}>
-                Name
-              </Table.TextHeaderCell>
-              <Table.TextHeaderCell textProps={{ size: 600 }}>
-                Score
-              </Table.TextHeaderCell>
-            </Table.Head>
-            <Table.Body height="100%">
-              {quiz.players.map((pl, ind) => (
-                <Table.Row key={ind} borderBottom="0px">
-                  <Table.TextCell textProps={{ size: 500 }}>
-                    {pl}
-                  </Table.TextCell>
-                  <Table.TextCell textProps={{ size: 500 }}>
-                    {calculateScore(ind, quiz.categories)}
-                  </Table.TextCell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-        </Pane>
-      </Dialog>
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
