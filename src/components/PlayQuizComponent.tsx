@@ -1,5 +1,14 @@
 import * as React from "react";
-import { Button, Pane, Pill, Table } from "evergreen-ui";
+import {
+  Button,
+  Pane,
+  Pill,
+  Table,
+  Heading,
+  majorScale,
+  minorScale,
+  Dialog,
+} from "evergreen-ui";
 import { Quiz, Category } from "../store/types";
 import { useState, useContext } from "react";
 import { PlayersComponent } from "./PlayersComponent";
@@ -35,6 +44,7 @@ export const PlayQuizComponent = ({
   qIndex: string;
 }) => {
   const [showPlayersScreen, setShowPlayersScreen] = useState<boolean>(false);
+  const [showScoreBoard, setShowScoreBoard] = useState<boolean>(false);
   const { setPlayers, editQuestion } = useContext(MethodsContext);
 
   const [activeQues, setActiveQues] = useState<{
@@ -43,48 +53,158 @@ export const PlayQuizComponent = ({
   }>(null);
 
   const quizPane = (
-    <Pane padding="20px">
-      {quiz.categories.map((cat, catInd) => (
-        <Pane key={catInd}>
-          <h2>{cat.title}</h2>
-          {cat.questions.map((ques, quesInd) => (
-            <Pill
-              key={quesInd}
-              margin="5px"
-              isInteractive={true}
-              onClick={() => {
-                setActiveQues({
-                  quesIndex: quesInd,
-                  catIndex: catInd,
-                });
-              }}
-            >
-              {ques.points}
-            </Pill>
-          ))}
-        </Pane>
-      ))}
-      <Button margin="5px" onClick={() => setShowPlayersScreen(true)}>
-        Edit Players
-      </Button>
+    <Pane
+      padding={majorScale(1)}
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      flex="1 0 auto"
+    >
+      <Pane width="100%" display="flex" flexDirection="row" flex="1 0 auto">
+        <Dialog
+          isShown={showScoreBoard}
+          title="Score board"
+          width="30%"
+          shouldCloseOnOverlayClick={false}
+          hasFooter={false}
+          onCloseComplete={() => {
+            setShowScoreBoard(false);
+          }}
+        >
+          <Pane width="100%">
+            <Table>
+              <Table.Head
+                fontWeight="bold"
+                fontSize="xx-large"
+                background="white"
+              >
+                <Table.TextHeaderCell textProps={{ size: 600 }}>
+                  Name
+                </Table.TextHeaderCell>
+                <Table.TextHeaderCell textProps={{ size: 600 }}>
+                  Score
+                </Table.TextHeaderCell>
+              </Table.Head>
+              <Table.Body height="100%">
+                {quiz.players.map((pl, ind) => (
+                  <Table.Row key={ind} borderBottom="0px">
+                    <Table.TextCell textProps={{ size: 500 }}>
+                      {pl}
+                    </Table.TextCell>
+                    <Table.TextCell textProps={{ size: 500 }}>
+                      {calculateScore(ind, quiz.categories)}
+                    </Table.TextCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Pane>
+        </Dialog>
+        <Heading
+          is="h1"
+          width="80%"
+          marginTop={majorScale(11)}
+          marginBottom={majorScale(5)}
+          marginLeft={majorScale(7)}
+          size={900}
+          textTransform="uppercase"
+          fontSize="xxx-large"
+          fontWeight="bold"
+        >
+          Pub quiz board
+        </Heading>
+        <Pill
+          marginTop={majorScale(11)}
+          marginBottom={majorScale(5)}
+          marginRight={majorScale(7)}
+          padding={majorScale(1)}
+          isInteractive={true}
+          width="18%"
+          height={majorScale(7)}
+          background="#999999"
+          isSolid
+          fontSize="1.5vw"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          onClick={() => setShowScoreBoard(true)}
+        >
+          Score board
+        </Pill>
+      </Pane>
 
-      <Table>
-        <Table.Head>
-          <Table.TextHeaderCell>Name</Table.TextHeaderCell>
-          <Table.TextHeaderCell>Score</Table.TextHeaderCell>
-        </Table.Head>
-        <Table.Body height={240}>
-          {quiz.players.map((pl, ind) => (
-            <Table.Row key={ind}>
-              <Table.TextCell>{pl}</Table.TextCell>
-              <Table.TextCell>
-                {calculateScore(ind, quiz.categories)}
-              </Table.TextCell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-      <Link to="/">Back to All Quizzes</Link>
+      <Pane
+        display="flex"
+        flexDirection="row"
+        justifyContent="center"
+        flexWrap="wrap"
+        flex="1 0 auto"
+      >
+        {quiz.categories.map((cat, catInd) => (
+          <Pane
+            key={catInd}
+            padding={majorScale(1)}
+            margin="1%"
+            width="17%"
+            background="white"
+            borderRadius={minorScale(3)}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Heading
+              size={600}
+              marginTop={majorScale(1)}
+              marginBottom={majorScale(2)}
+              fontWeight="bold"
+              display="flex"
+              textAlign="center"
+              verticalAlign="middle"
+              flex="1 0 auto"
+              wordBreak="break-word"
+              wordWrap="break-word"
+            >
+              {cat.title}
+            </Heading>
+            {cat.questions.map((ques, quesInd) => (
+              <Pill
+                key={quesInd}
+                margin={majorScale(1)}
+                padding={majorScale(1)}
+                isInteractive={true}
+                width="70%"
+                height={majorScale(7)}
+                background="#999999"
+                isSolid
+                fontSize="x-large"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                onClick={() => {
+                  setActiveQues({
+                    quesIndex: quesInd,
+                    catIndex: catInd,
+                  });
+                }}
+              >
+                {ques.points}
+              </Pill>
+            ))}
+          </Pane>
+        ))}
+      </Pane>
+
+      <Pane display="flex">
+        <Heading is="h3" margin={majorScale(1)}>
+          <Link to="#" onClick={() => setShowPlayersScreen(true)}>
+            Edit Players
+          </Link>
+        </Heading>
+        <Heading is="h3" margin={majorScale(1)}>
+          <Link to="/">Back to All Quizzes</Link>
+        </Heading>
+      </Pane>
     </Pane>
   );
 
