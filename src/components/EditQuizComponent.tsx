@@ -5,6 +5,7 @@ import { Button, Pane, TextInput } from "evergreen-ui";
 import { Quiz } from "../store/types";
 import { EditCategoryComponent } from "./EditCategoryComponent";
 import { MethodsContext } from "../store";
+import { v4 as uuidv4 } from "uuid";
 
 // Modifies a quiz
 export const EditQuizComponent = ({
@@ -50,7 +51,7 @@ export const EditQuizComponent = ({
 
         {quiz.categories.map((cat, index) => (
           <EditCategoryComponent
-            key={index}
+            key={uuidv4()}
             category={cat}
             catIndex={index}
             quizIndex={parseInt(qIndex, 10)}

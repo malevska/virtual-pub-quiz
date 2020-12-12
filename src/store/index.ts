@@ -47,6 +47,17 @@ export const useQuizzes = (initial: Quiz[]) => {
     });
   };
 
+  const removeCategory = (qIndex: number, cIndex: number) => {
+    const quiz = quizzes[qIndex];
+    replaceQuiz(qIndex, {
+      ...quiz,
+      categories: [
+        ...quiz.categories.slice(0, cIndex),
+        ...quiz.categories.slice(cIndex + 1),
+      ],
+    });
+  };
+
   const addQuestion = (qIndex: number, cIndex: number, quest: Question) => {
     const quiz = quizzes[qIndex];
     const cat = quizzes[qIndex].categories[cIndex];
@@ -91,6 +102,29 @@ export const useQuizzes = (initial: Quiz[]) => {
     });
   };
 
+  const removeQuestion = (
+    qIndex: number,
+    cIndex: number,
+    questIndex: number
+  ) => {
+    const quiz = quizzes[qIndex];
+    const cat = quizzes[qIndex].categories[cIndex];
+    replaceQuiz(qIndex, {
+      ...quiz,
+      categories: [
+        ...quiz.categories.slice(0, cIndex),
+        {
+          ...cat,
+          questions: [
+            ...cat.questions.slice(0, questIndex),
+            ...cat.questions.slice(questIndex + 1),
+          ],
+        },
+        ...quiz.categories.slice(cIndex + 1),
+      ],
+    });
+  };
+
   const setPlayers = (qIndex: number, playersList: string[]) => {
     replaceQuiz(qIndex, {
       ...quizzes[qIndex],
@@ -107,8 +141,10 @@ export const useQuizzes = (initial: Quiz[]) => {
       startQuiz,
       addCategory,
       editCategory,
+      removeCategory,
       addQuestion,
       editQuestion,
+      removeQuestion,
       setPlayers,
     },
   ] as [Quiz[], AppMethods];

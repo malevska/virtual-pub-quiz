@@ -4,6 +4,7 @@ import { Button, Pane, TextInput, Pill } from "evergreen-ui";
 import { Category } from "../store/types";
 import { EditQuestionComponent } from "./EditQuestionComponent";
 import { MethodsContext } from "../store";
+import { v4 as uuidv4 } from "uuid";
 
 // Modifies a categry
 export const EditCategoryComponent = ({
@@ -19,7 +20,9 @@ export const EditCategoryComponent = ({
   const [dialogIsShown, setDialogIsShown] = useState<boolean>(false);
   const [qIndex, setQIndex] = useState<number>(-1);
   const [qmode, setQMode] = useState("add");
-  const { editCategory } = useContext(MethodsContext);
+  const { editCategory, removeCategory, removeQuestion } = useContext(
+    MethodsContext
+  );
 
   return (
     <Pane padding="20px">
@@ -34,6 +37,13 @@ export const EditCategoryComponent = ({
       />
       <Button
         onClick={() => {
+          removeCategory(quizIndex, catIndex);
+        }}
+      >
+        Remove Category
+      </Button>
+      <Button
+        onClick={() => {
           setDialogIsShown(true);
           setQMode("add");
         }}
@@ -42,21 +52,30 @@ export const EditCategoryComponent = ({
       </Button>
       <Pane>
         {category.questions.map((q, index) => (
-          <Pill
-            key={index}
-            display="inline-flex"
-            margin={"5px"}
-            isInteractive={true}
-            color="green"
-            isSolid
-            onClick={() => {
-              setQIndex(index);
-              setQMode("edit");
-              setDialogIsShown(true);
-            }}
-          >
-            {q.points}
-          </Pill>
+          <Pane>
+            <Pill
+              key={uuidv4()}
+              display="inline-flex"
+              margin={"5px"}
+              isInteractive={true}
+              color="green"
+              isSolid
+              onClick={() => {
+                setQIndex(index);
+                setQMode("edit");
+                setDialogIsShown(true);
+              }}
+            >
+              {q.points}
+            </Pill>
+            <Button
+              onClick={() => {
+                removeQuestion(quizIndex, catIndex, index);
+              }}
+            >
+              Remove Question
+            </Button>
+          </Pane>
         ))}
       </Pane>
 

@@ -14,6 +14,7 @@ import { EditPlayersComponent } from "./EditPlayersComponent";
 import { ShowQuestionComponent } from "./ShowQuestionComponent";
 import { MethodsContext } from "../store";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 // const calculateScore = (playerIndex: number, categories: Category[]) => {
 //   const allQuestions = categories.map((cat) => cat.questions);
@@ -86,7 +87,7 @@ export const PlayQuizComponent = ({
               </Table.Head>
               <Table.Body height="100%">
                 {quiz.players.map((pl, ind) => (
-                  <Table.Row key={ind} borderBottom="0px">
+                  <Table.Row key={uuidv4()} borderBottom="0px">
                     <Table.TextCell textProps={{ size: 500 }}>
                       {pl}
                     </Table.TextCell>
@@ -141,7 +142,7 @@ export const PlayQuizComponent = ({
       >
         {quiz.categories.map((cat, catInd) => (
           <Pane
-            key={catInd}
+            key={uuidv4()}
             padding={majorScale(1)}
             margin="1%"
             width="17%"
@@ -166,30 +167,36 @@ export const PlayQuizComponent = ({
             >
               {cat.title}
             </Heading>
-            {cat.questions.map((ques, quesInd) => (
-              <Pill
-                key={quesInd}
-                margin={majorScale(1)}
-                padding={majorScale(1)}
-                isInteractive={true}
-                width="70%"
-                height={majorScale(7)}
-                background="#999999"
-                isSolid
-                fontSize="x-large"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                onClick={() => {
-                  setActiveQues({
-                    quesIndex: quesInd,
-                    catIndex: catInd,
-                  });
-                }}
-              >
-                {ques.points}
-              </Pill>
-            ))}
+            {cat.questions
+              .slice()
+              .sort((a, b) => b.points - a.points)
+              .map((ques, quesInd) => (
+                <Pill
+                  key={uuidv4()}
+                  margin={majorScale(1)}
+                  padding={majorScale(1)}
+                  isInteractive={ques.answererIndex >= 0 ? false : true}
+                  width="70%"
+                  height={majorScale(7)}
+                  background="#999999"
+                  opacity={ques.answererIndex >= 0 ? "0.3" : "1"}
+                  isSolid={true}
+                  fontSize="x-large"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => {
+                    ques.answererIndex >= 0
+                      ? null
+                      : setActiveQues({
+                          quesIndex: quesInd,
+                          catIndex: catInd,
+                        });
+                  }}
+                >
+                  {ques.points}
+                </Pill>
+              ))}
           </Pane>
         ))}
       </Pane>

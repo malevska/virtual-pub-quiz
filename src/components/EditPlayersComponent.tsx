@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Button, Pane, TextInput } from "evergreen-ui";
 import { Quiz } from "../store/types";
+import { v4 as uuidv4 } from "uuid";
 
 // Modifies the players list
 export const EditPlayersComponent = ({
@@ -35,7 +36,7 @@ export const EditPlayersComponent = ({
         <Pane>
           {playersList.map((p, ind) => (
             <TextInput
-              key={ind}
+              key={uuidv4()}
               defaultValue={p}
               onBlur={(e: any) =>
                 setPlayersList([

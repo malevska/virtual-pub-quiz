@@ -30,6 +30,7 @@ export type AppMethods = {
   startQuiz: (qIndex: number, isPlaying: boolean) => void;
   addCategory: (qIndex: number, title: string) => void;
   editCategory: (qIndex: number, cIndex: number, title: string) => void;
+  removeCategory: (qIndex: number, cIndex: number) => void;
   addQuestion: (qIndex: number, cIndex: number, quest: Question) => void;
   editQuestion: (
     qIndex: number,
@@ -39,6 +40,7 @@ export type AppMethods = {
     answerer?: number,
     points?: number
   ) => void;
+  removeQuestion: (qIndex: number, cIndex: number, questIndex: number) => void;
   setPlayers: (qIndex: number, playersList: string[]) => void;
 };
 
