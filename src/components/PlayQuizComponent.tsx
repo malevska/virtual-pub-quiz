@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Button,
   Pane,
   Pill,
   Table,
@@ -11,8 +10,8 @@ import {
 } from "evergreen-ui";
 import { Quiz, Category } from "../store/types";
 import { useState, useContext } from "react";
-import { PlayersComponent } from "./PlayersComponent";
-import { ViewQuestionComponent } from "./ViewQuestionComponent";
+import { EditPlayersComponent } from "./EditPlayersComponent";
+import { ShowQuestionComponent } from "./ShowQuestionComponent";
 import { MethodsContext } from "../store";
 import { Link } from "react-router-dom";
 
@@ -87,7 +86,8 @@ export const PlayQuizComponent = ({
               </Table.Head>
               <Table.Body height="100%">
                 {quiz.players.map((pl, ind) => (
-                  <Table.Row key={ind} borderBottom="0px">
+                  <Table.Row key={pl} borderBottom="0px">
+                    {/* Players are just strings, so you can use that as an ID */}
                     <Table.TextCell textProps={{ size: 500 }}>
                       {pl}
                     </Table.TextCell>
@@ -142,7 +142,7 @@ export const PlayQuizComponent = ({
       >
         {quiz.categories.map((cat, catInd) => (
           <Pane
-            key={catInd}
+            key={cat.id}
             padding={majorScale(1)}
             margin="1%"
             width="17%"
@@ -167,30 +167,36 @@ export const PlayQuizComponent = ({
             >
               {cat.title}
             </Heading>
-            {cat.questions.map((ques, quesInd) => (
-              <Pill
-                key={quesInd}
-                margin={majorScale(1)}
-                padding={majorScale(1)}
-                isInteractive={true}
-                width="70%"
-                height={majorScale(7)}
-                background="#999999"
-                isSolid
-                fontSize="x-large"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                onClick={() => {
-                  setActiveQues({
-                    quesIndex: quesInd,
-                    catIndex: catInd,
-                  });
-                }}
-              >
-                {ques.points}
-              </Pill>
-            ))}
+            {cat.questions
+              .slice()
+              .sort((a, b) => b.points - a.points)
+              .map((ques, quesInd) => (
+                <Pill
+                  key={cat.id}
+                  margin={majorScale(1)}
+                  padding={majorScale(1)}
+                  isInteractive={ques.answererIndex >= 0 ? false : true}
+                  width="70%"
+                  height={majorScale(7)}
+                  background="#999999"
+                  opacity={ques.answererIndex >= 0 ? "0.3" : "1"}
+                  isSolid={true}
+                  fontSize="x-large"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => {
+                    ques.answererIndex >= 0
+                      ? null
+                      : setActiveQues({
+                          quesIndex: quesInd,
+                          catIndex: catInd,
+                        });
+                  }}
+                >
+                  {ques.points}
+                </Pill>
+              ))}
           </Pane>
         ))}
       </Pane>
@@ -210,7 +216,7 @@ export const PlayQuizComponent = ({
 
   if (activeQues)
     return (
-      <ViewQuestionComponent
+      <ShowQuestionComponent
         question={
           quiz.categories[activeQues.catIndex].questions[activeQues.quesIndex]
         }
@@ -232,7 +238,7 @@ export const PlayQuizComponent = ({
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
-    <PlayersComponent
+    <EditPlayersComponent
       quiz={quiz}
       onFinish={(playersList) => {
         setPlayers(parseInt(qIndex, 10), playersList);

@@ -3,9 +3,10 @@ import { useState, useContext } from "react";
 import { Pane, TextInput, Textarea, Dialog, RadioGroup } from "evergreen-ui";
 import { Question } from "../store/types";
 import { MethodsContext } from "../store";
+import { v4 as uuid } from "uuid";
 
 // Modifies a question
-export const QuestionComponent = ({
+export const EditQuestionComponent = ({
   question,
   questionIndex,
   catIndex,
@@ -76,9 +77,9 @@ export const QuestionComponent = ({
       width={"800px"}
       shouldCloseOnOverlayClick={false}
       onCloseComplete={() => {
-        onClose();
         mode === "add"
           ? addQuestion(quizIndex, catIndex, {
+              id: uuid(),
               text: questionText,
               answer: answer,
               embedsType: embedsType,
@@ -86,12 +87,14 @@ export const QuestionComponent = ({
               points: points,
             })
           : editQuestion(quizIndex, catIndex, questionIndex, {
+              id: question.id,
               text: questionText,
               answer: answer,
               embedsType: embedsType,
               embeds: embeds,
               points: points,
             });
+        onClose();
       }}
     >
       {pane}
