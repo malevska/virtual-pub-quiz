@@ -4,7 +4,6 @@ import { Button, Pane, TextInput, Pill } from "evergreen-ui";
 import { Category } from "../store/types";
 import { EditQuestionComponent } from "./EditQuestionComponent";
 import { MethodsContext } from "../store";
-import { v4 as uuidv4 } from "uuid";
 
 // Modifies a categry
 export const EditCategoryComponent = ({
@@ -54,7 +53,7 @@ export const EditCategoryComponent = ({
         {category.questions.map((q, index) => (
           <Pane>
             <Pill
-              key={uuidv4()}
+              key={q.id}
               display="inline-flex"
               margin={"5px"}
               isInteractive={true}
@@ -84,6 +83,7 @@ export const EditCategoryComponent = ({
           question={
             qmode === "add"
               ? {
+                  id: null,
                   text: "",
                   answer: "",
                   embedsType: "none",

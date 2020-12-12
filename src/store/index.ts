@@ -1,5 +1,6 @@
 import { Question, Quiz, AppMethods } from "./types";
 import { useState, createContext } from "react";
+import { v4 as uuid } from "uuid";
 
 /**
  * Our own custom hook for handling quiz state
@@ -10,7 +11,7 @@ export const useQuizzes = (initial: Quiz[]) => {
   const addQuiz = (title: string) => {
     setQuizzes([
       ...quizzes,
-      { title, isPlaying: false, players: [], categories: [] },
+      { title, id: uuid(), isPlaying: false, players: [], categories: [] },
     ]);
   };
 
@@ -30,7 +31,7 @@ export const useQuizzes = (initial: Quiz[]) => {
     const quiz = quizzes[qIndex];
     replaceQuiz(qIndex, {
       ...quiz,
-      categories: [...quiz.categories, { title, questions: [] }],
+      categories: [...quiz.categories, { id: uuid(), title, questions: [] }],
     });
   };
 

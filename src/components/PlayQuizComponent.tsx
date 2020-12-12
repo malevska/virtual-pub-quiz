@@ -14,7 +14,6 @@ import { EditPlayersComponent } from "./EditPlayersComponent";
 import { ShowQuestionComponent } from "./ShowQuestionComponent";
 import { MethodsContext } from "../store";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 // const calculateScore = (playerIndex: number, categories: Category[]) => {
 //   const allQuestions = categories.map((cat) => cat.questions);
@@ -87,7 +86,8 @@ export const PlayQuizComponent = ({
               </Table.Head>
               <Table.Body height="100%">
                 {quiz.players.map((pl, ind) => (
-                  <Table.Row key={uuidv4()} borderBottom="0px">
+                  <Table.Row key={pl} borderBottom="0px">
+                    {/* Players are just strings, so you can use that as an ID */}
                     <Table.TextCell textProps={{ size: 500 }}>
                       {pl}
                     </Table.TextCell>
@@ -142,7 +142,7 @@ export const PlayQuizComponent = ({
       >
         {quiz.categories.map((cat, catInd) => (
           <Pane
-            key={uuidv4()}
+            key={cat.id}
             padding={majorScale(1)}
             margin="1%"
             width="17%"
@@ -172,7 +172,7 @@ export const PlayQuizComponent = ({
               .sort((a, b) => b.points - a.points)
               .map((ques, quesInd) => (
                 <Pill
-                  key={uuidv4()}
+                  key={cat.id}
                   margin={majorScale(1)}
                   padding={majorScale(1)}
                   isInteractive={ques.answererIndex >= 0 ? false : true}
