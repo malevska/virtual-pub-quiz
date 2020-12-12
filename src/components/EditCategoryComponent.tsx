@@ -2,11 +2,11 @@ import * as React from "react";
 import { useState, useContext } from "react";
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
 import { Category } from "../store/types";
-import { QuestionComponent } from "./QuestionComponent";
+import { EditQuestionComponent } from "./EditQuestionComponent";
 import { MethodsContext } from "../store";
 
 // Modifies a categry
-export const CategoryComponent = ({
+export const EditCategoryComponent = ({
   category,
   catIndex,
   quizIndex,
@@ -61,7 +61,7 @@ export const CategoryComponent = ({
       </Pane>
 
       {dialogIsShown ? (
-        <QuestionComponent
+        <EditQuestionComponent
           question={
             qmode === "add"
               ? {

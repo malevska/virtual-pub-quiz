@@ -12,7 +12,7 @@ import { Question } from "../store/types";
 import ReactPlayer from "react-player";
 
 //Shows the question and the list of players that may answer it
-export const ViewQuestionComponent = ({
+export const ShowQuestionComponent = ({
   question,
   players,
   onClose,

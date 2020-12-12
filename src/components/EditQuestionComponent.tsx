@@ -5,7 +5,7 @@ import { Question } from "../store/types";
 import { MethodsContext } from "../store";
 
 // Modifies a question
-export const QuestionComponent = ({
+export const EditQuestionComponent = ({
   question,
   questionIndex,
   catIndex,

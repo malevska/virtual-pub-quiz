@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
 import { Button, Pane, TextInput } from "evergreen-ui";
-import { Quiz, AppMethods } from "../store/types";
-import { PlayQuizComponent } from "./PlayQuizComponent";
+import { Quiz } from "../store/types";
 
 // Modifies the players list
-export const PlayersComponent = ({
+export const EditPlayersComponent = ({
   quiz,
   onFinish,
 }: {

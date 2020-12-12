@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Button,
   Pane,
   Pill,
   Table,
@@ -11,8 +10,8 @@ import {
 } from "evergreen-ui";
 import { Quiz, Category } from "../store/types";
 import { useState, useContext } from "react";
-import { PlayersComponent } from "./PlayersComponent";
-import { ViewQuestionComponent } from "./ViewQuestionComponent";
+import { EditPlayersComponent } from "./EditPlayersComponent";
+import { ShowQuestionComponent } from "./ShowQuestionComponent";
 import { MethodsContext } from "../store";
 import { Link } from "react-router-dom";
 
@@ -210,7 +209,7 @@ export const PlayQuizComponent = ({
 
   if (activeQues)
     return (
-      <ViewQuestionComponent
+      <ShowQuestionComponent
         question={
           quiz.categories[activeQues.catIndex].questions[activeQues.quesIndex]
         }
@@ -232,7 +231,7 @@ export const PlayQuizComponent = ({
     );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
-    <PlayersComponent
+    <EditPlayersComponent
       quiz={quiz}
       onFinish={(playersList) => {
         setPlayers(parseInt(qIndex, 10), playersList);
