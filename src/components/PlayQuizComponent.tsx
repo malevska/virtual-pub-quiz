@@ -172,7 +172,7 @@ export const PlayQuizComponent = ({
               .sort((a, b) => b.points - a.points)
               .map((ques, quesInd) => (
                 <Pill
-                  key={cat.id}
+                  key={ques.id}
                   margin={majorScale(1)}
                   padding={majorScale(1)}
                   isInteractive={ques.answererIndex >= 0 ? false : true}

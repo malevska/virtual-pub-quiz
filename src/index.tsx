@@ -14,16 +14,20 @@ import { PlayQuizComponent } from "./components/PlayQuizComponent";
 import { EditQuizComponent } from "./components/EditQuizComponent";
 import { Quiz } from "./store/types";
 import { useQuizzes, MethodsContext } from "./store/index";
+import { v4 as uuid } from "uuid";
 
 const db: Quiz[] = [
   {
+    id: uuid(),
     title: "TestQuiz",
     players: ["Pero", "Mile"],
     categories: [
       {
+        id: uuid(),
         title: "H4 Random",
         questions: [
           {
+            id: uuid(),
             text: "Banana",
             answer: "Yellow",
             embedsType: "none",
@@ -31,6 +35,7 @@ const db: Quiz[] = [
             points: 5,
           },
           {
+            id: uuid(),
             text: "Apple",
             answer: "Red",
             embedsType: "none",
@@ -38,6 +43,7 @@ const db: Quiz[] = [
             points: 4,
           },
           {
+            id: uuid(),
             text: "Grapes",
             answer: "Purple",
             embedsType: "none",
@@ -48,9 +54,11 @@ const db: Quiz[] = [
       },
 
       {
+        id: uuid(),
         title: "European geography",
         questions: [
           {
+            id: uuid(),
             text: "Lemon",
             answer: "Yellow",
             embedsType: "none",
@@ -58,6 +66,7 @@ const db: Quiz[] = [
             points: 5,
           },
           {
+            id: uuid(),
             text: "Kiwi",
             answer: "Green",
             embedsType: "none",
@@ -65,6 +74,7 @@ const db: Quiz[] = [
             points: 4,
           },
           {
+            id: uuid(),
             text: "Orange",
             answer: "Orange",
             embedsType: "none",
