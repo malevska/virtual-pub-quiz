@@ -75,12 +75,15 @@ export const ShowQuestionComponent = ({
           isShown={showAnswer}
           title="Answer"
           width="50%"
-          shouldCloseOnOverlayClick={false}
+          shouldCloseOnOverlayClick={true}
           hasFooter={false}
           onCloseComplete={() => {
             setShowAnswer(false);
           }}
         >
+          <Heading size={900} margin={majorScale(4)}>
+            {question.text}
+          </Heading>
           <Heading size={900} margin={majorScale(4)}>
             {question.answer}
           </Heading>

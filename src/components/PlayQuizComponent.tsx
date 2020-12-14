@@ -167,36 +167,31 @@ export const PlayQuizComponent = ({
             >
               {cat.title}
             </Heading>
-            {cat.questions
-              .slice()
-              .sort((a, b) => b.points - a.points)
-              .map((ques, quesInd) => (
-                <Pill
-                  key={ques.id}
-                  margin={majorScale(1)}
-                  padding={majorScale(1)}
-                  isInteractive={ques.answererIndex >= 0 ? false : true}
-                  width="70%"
-                  height={majorScale(7)}
-                  background="#999999"
-                  opacity={ques.answererIndex >= 0 ? "0.3" : "1"}
-                  isSolid={true}
-                  fontSize="x-large"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  onClick={() => {
-                    ques.answererIndex >= 0
-                      ? null
-                      : setActiveQues({
-                          quesIndex: quesInd,
-                          catIndex: catInd,
-                        });
-                  }}
-                >
-                  {ques.points}
-                </Pill>
-              ))}
+            {cat.questions.slice().map((ques, quesInd) => (
+              <Pill
+                key={ques.id}
+                margin={majorScale(1)}
+                padding={majorScale(1)}
+                isInteractive={true}
+                width="70%"
+                height={majorScale(7)}
+                background="#999999"
+                opacity={ques.answererIndex >= 0 ? "0.3" : "1"}
+                isSolid={true}
+                fontSize="x-large"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                onClick={() => {
+                  setActiveQues({
+                    quesIndex: quesInd,
+                    catIndex: catInd,
+                  });
+                }}
+              >
+                {ques.points}
+              </Pill>
+            ))}
           </Pane>
         ))}
       </Pane>
