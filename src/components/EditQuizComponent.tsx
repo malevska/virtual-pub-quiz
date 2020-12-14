@@ -3,11 +3,11 @@ import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button, Pane, TextInput } from "evergreen-ui";
 import { Quiz } from "../store/types";
-import { CategoryComponent } from "./CategoryComponent";
+import { EditCategoryComponent } from "./EditCategoryComponent";
 import { MethodsContext } from "../store";
 
 // Modifies a quiz
-export const QuizComponent = ({
+export const EditQuizComponent = ({
   quiz,
   qIndex,
 }: {
@@ -49,8 +49,8 @@ export const QuizComponent = ({
         <h1>All Categories</h1>
 
         {quiz.categories.map((cat, index) => (
-          <CategoryComponent
-            key={index}
+          <EditCategoryComponent
+            key={cat.id}
             category={cat}
             catIndex={index}
             quizIndex={parseInt(qIndex, 10)}

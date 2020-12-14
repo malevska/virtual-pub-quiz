@@ -1,6 +1,7 @@
 import { Context } from "react";
 
 export interface Quiz {
+  id: string;
   title: string;
   isPlaying: boolean;
   players: string[];
@@ -8,11 +9,13 @@ export interface Quiz {
 }
 
 export interface Category {
+  id: string;
   title: string;
   questions: Question[];
 }
 
 export interface Question {
+  id: string;
   text: string;
   answer: string;
   embedsType: EmbedsType;
@@ -30,6 +33,7 @@ export type AppMethods = {
   startQuiz: (qIndex: number, isPlaying: boolean) => void;
   addCategory: (qIndex: number, title: string) => void;
   editCategory: (qIndex: number, cIndex: number, title: string) => void;
+  removeCategory: (qIndex: number, cIndex: number) => void;
   addQuestion: (qIndex: number, cIndex: number, quest: Question) => void;
   editQuestion: (
     qIndex: number,
@@ -39,6 +43,7 @@ export type AppMethods = {
     answerer?: number,
     points?: number
   ) => void;
+  removeQuestion: (qIndex: number, cIndex: number, questIndex: number) => void;
   setPlayers: (qIndex: number, playersList: string[]) => void;
 };
 

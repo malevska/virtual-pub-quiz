@@ -1,5 +1,6 @@
 import { Question, Quiz, AppMethods } from "./types";
 import { useState, createContext } from "react";
+import { v4 as uuid } from "uuid";
 
 /**
  * Our own custom hook for handling quiz state
@@ -10,7 +11,7 @@ export const useQuizzes = (initial: Quiz[]) => {
   const addQuiz = (title: string) => {
     setQuizzes([
       ...quizzes,
-      { title, isPlaying: false, players: [], categories: [] },
+      { title, id: uuid(), isPlaying: false, players: [], categories: [] },
     ]);
   };
 
@@ -30,7 +31,7 @@ export const useQuizzes = (initial: Quiz[]) => {
     const quiz = quizzes[qIndex];
     replaceQuiz(qIndex, {
       ...quiz,
-      categories: [...quiz.categories, { title, questions: [] }],
+      categories: [...quiz.categories, { id: uuid(), title, questions: [] }],
     });
   };
 
@@ -42,6 +43,17 @@ export const useQuizzes = (initial: Quiz[]) => {
       categories: [
         ...quiz.categories.slice(0, cIndex),
         { ...cat, title },
+        ...quiz.categories.slice(cIndex + 1),
+      ],
+    });
+  };
+
+  const removeCategory = (qIndex: number, cIndex: number) => {
+    const quiz = quizzes[qIndex];
+    replaceQuiz(qIndex, {
+      ...quiz,
+      categories: [
+        ...quiz.categories.slice(0, cIndex),
         ...quiz.categories.slice(cIndex + 1),
       ],
     });
@@ -91,6 +103,29 @@ export const useQuizzes = (initial: Quiz[]) => {
     });
   };
 
+  const removeQuestion = (
+    qIndex: number,
+    cIndex: number,
+    questIndex: number
+  ) => {
+    const quiz = quizzes[qIndex];
+    const cat = quizzes[qIndex].categories[cIndex];
+    replaceQuiz(qIndex, {
+      ...quiz,
+      categories: [
+        ...quiz.categories.slice(0, cIndex),
+        {
+          ...cat,
+          questions: [
+            ...cat.questions.slice(0, questIndex),
+            ...cat.questions.slice(questIndex + 1),
+          ],
+        },
+        ...quiz.categories.slice(cIndex + 1),
+      ],
+    });
+  };
+
   const setPlayers = (qIndex: number, playersList: string[]) => {
     replaceQuiz(qIndex, {
       ...quizzes[qIndex],
@@ -107,8 +142,10 @@ export const useQuizzes = (initial: Quiz[]) => {
       startQuiz,
       addCategory,
       editCategory,
+      removeCategory,
       addQuestion,
       editQuestion,
+      removeQuestion,
       setPlayers,
     },
   ] as [Quiz[], AppMethods];

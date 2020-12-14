@@ -2,11 +2,11 @@ import * as React from "react";
 import { useState, useContext } from "react";
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
 import { Category } from "../store/types";
-import { QuestionComponent } from "./QuestionComponent";
+import { EditQuestionComponent } from "./EditQuestionComponent";
 import { MethodsContext } from "../store";
 
 // Modifies a categry
-export const CategoryComponent = ({
+export const EditCategoryComponent = ({
   category,
   catIndex,
   quizIndex,
@@ -19,7 +19,9 @@ export const CategoryComponent = ({
   const [dialogIsShown, setDialogIsShown] = useState<boolean>(false);
   const [qIndex, setQIndex] = useState<number>(-1);
   const [qmode, setQMode] = useState("add");
-  const { editCategory } = useContext(MethodsContext);
+  const { editCategory, removeCategory, removeQuestion } = useContext(
+    MethodsContext
+  );
 
   return (
     <Pane padding="20px">
@@ -34,6 +36,13 @@ export const CategoryComponent = ({
       />
       <Button
         onClick={() => {
+          removeCategory(quizIndex, catIndex);
+        }}
+      >
+        Remove Category
+      </Button>
+      <Button
+        onClick={() => {
           setDialogIsShown(true);
           setQMode("add");
         }}
@@ -42,29 +51,39 @@ export const CategoryComponent = ({
       </Button>
       <Pane>
         {category.questions.map((q, index) => (
-          <Pill
-            key={index}
-            display="inline-flex"
-            margin={"5px"}
-            isInteractive={true}
-            color="green"
-            isSolid
-            onClick={() => {
-              setQIndex(index);
-              setQMode("edit");
-              setDialogIsShown(true);
-            }}
-          >
-            {q.points}
-          </Pill>
+          <Pane>
+            <Pill
+              key={q.id}
+              display="inline-flex"
+              margin={"5px"}
+              isInteractive={true}
+              color="green"
+              isSolid
+              onClick={() => {
+                setQIndex(index);
+                setQMode("edit");
+                setDialogIsShown(true);
+              }}
+            >
+              {q.points}
+            </Pill>
+            <Button
+              onClick={() => {
+                removeQuestion(quizIndex, catIndex, index);
+              }}
+            >
+              Remove Question
+            </Button>
+          </Pane>
         ))}
       </Pane>
 
       {dialogIsShown ? (
-        <QuestionComponent
+        <EditQuestionComponent
           question={
             qmode === "add"
               ? {
+                  id: null,
                   text: "",
                   answer: "",
                   embedsType: "none",

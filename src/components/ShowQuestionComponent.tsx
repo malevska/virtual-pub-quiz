@@ -12,9 +12,10 @@ import {
 } from "evergreen-ui";
 import { Question } from "../store/types";
 import ReactPlayer from "react-player";
+import { v4 as uuidv4 } from "uuid";
 
 //Shows the question and the list of players that may answer it
-export const ViewQuestionComponent = ({
+export const ShowQuestionComponent = ({
   question,
   players,
   onClose,
@@ -112,7 +113,7 @@ export const ViewQuestionComponent = ({
             return (
               <Radio
                 marginRight={majorScale(1)}
-                key={ind}
+                key={uuidv4()}
                 name="players"
                 label={pl}
                 onClick={() => setAnswerer(ind)}
