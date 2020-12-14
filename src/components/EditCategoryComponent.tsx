@@ -53,9 +53,8 @@ export const EditCategoryComponent = ({
       </Button>
       <Pane>
         {category.questions.map((q, index) => (
-          <Pane>
+          <Pane key={q.id}>
             <Pill
-              key={q.id}
               display="inline-flex"
               margin={"5px"}
               isInteractive={true}
