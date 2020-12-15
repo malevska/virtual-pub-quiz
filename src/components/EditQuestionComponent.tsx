@@ -56,7 +56,7 @@ export const EditQuestionComponent = ({
         type={"number"}
         value={points}
         onChange={(e: any) => {
-          setPoints(parseInt(e.target.value, 10));
+          setPoints(parseInt(e.target.value || 0, 10));
         }}
       />
     </Pane>
