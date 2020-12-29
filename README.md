@@ -17,3 +17,7 @@ Next, we are gonna need a dev server to run the project. We're gonna install a j
 Finally, to make things convenient, we will make both parcel watch and the http server start with a single command. We will use a package called `npm-run-all` for this - it allows us to run command line tasks in parallel and create a `yarn dev` command in our `package.json`
 
 One more thing. We're gonna add prettier to autmatically format our code: `yarn add --dev prettier`. If you use .vscode, we will enable it in our .vscode settings.
+
+## Structure
+
+This project uses [Immer JS](https://github.com/immerjs/immer) for state managemnet.
