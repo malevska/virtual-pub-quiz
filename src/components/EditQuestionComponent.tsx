@@ -68,17 +68,16 @@ export const EditQuestionComponent = ({
       title="Question"
       width={"800px"}
       shouldCloseOnOverlayClick={false}
-      onConfirm={() => {
-        const newQuestion = {
+      onConfirm={() =>
+        onClose({
           id: question ? question.id : null,
           text: questionText,
           answer: answer,
           embedsType: embedsType,
           embeds: embeds,
           points: points,
-        };
-        onClose(newQuestion);
-      }}
+        })
+      }
       onCancel={() => {
         onClose();
       }}
