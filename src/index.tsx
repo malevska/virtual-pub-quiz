@@ -6,7 +6,6 @@ import {
   Switch,
   Route,
   useParams,
-  useHistory,
   Link,
 } from "react-router-dom";
 import { Button, Pane, TextInput } from "evergreen-ui";
@@ -52,7 +51,6 @@ const db: Quiz[] = [
           },
         ],
       },
-
       {
         id: uuid(),
         title: "European geography",
@@ -112,7 +110,7 @@ const QuizList = ({ quizzes }: { quizzes: Quiz[] }) => {
 
       <h1>All Quizzes</h1>
       {quizzes.map((q, index) => (
-        <h2 key={index}>
+        <h2 key={q.id}>
           {q.title} ({q.isPlaying ? "P" : "/"}) -
           <Link to={`/edit/${index}`}>Edit</Link>
           <Link

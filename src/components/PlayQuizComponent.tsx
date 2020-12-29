@@ -47,9 +47,38 @@ export const PlayQuizComponent = ({
   const { setPlayers, editQuestion } = useContext(MethodsContext);
 
   const [activeQues, setActiveQues] = useState<{
-    catIndex: number;
-    quesIndex: number;
+    cId: string;
+    qId: string;
   }>(null);
+
+  if (activeQues) {
+    return (
+      <ShowQuestionComponent
+        question={quiz.categories
+          .find((c) => c.id === activeQues.cId)
+          .questions.find((q) => q.id === activeQues.qId)}
+        players={quiz.players}
+        onClose={(answerer: number, points: number) => {
+          const catIndex = quiz.categories.findIndex(
+            (c) => c.id === activeQues.cId
+          );
+          const quesIndex = quiz.categories[catIndex].questions.findIndex(
+            (q) => q.id === activeQues.qId
+          );
+
+          editQuestion(
+            parseInt(qIndex, 10),
+            catIndex,
+            quesIndex,
+            quiz.categories[catIndex].questions[quesIndex],
+            answerer,
+            points
+          );
+          setActiveQues(null);
+        }}
+      />
+    );
+  }
 
   const quizPane = (
     <Pane
@@ -175,7 +204,7 @@ export const PlayQuizComponent = ({
                   key={ques.id}
                   margin={majorScale(1)}
                   padding={majorScale(1)}
-                  isInteractive={ques.answererIndex >= 0 ? false : true}
+                  isInteractive={true}
                   width="70%"
                   height={majorScale(7)}
                   background="#999999"
@@ -185,14 +214,7 @@ export const PlayQuizComponent = ({
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  onClick={() => {
-                    ques.answererIndex >= 0
-                      ? null
-                      : setActiveQues({
-                          quesIndex: quesInd,
-                          catIndex: catInd,
-                        });
-                  }}
+                  onClick={() => setActiveQues({ cId: cat.id, qId: ques.id })}
                 >
                   {ques.points}
                 </Pill>
@@ -213,29 +235,6 @@ export const PlayQuizComponent = ({
       </Pane>
     </Pane>
   );
-
-  if (activeQues)
-    return (
-      <ShowQuestionComponent
-        question={
-          quiz.categories[activeQues.catIndex].questions[activeQues.quesIndex]
-        }
-        players={quiz.players}
-        onClose={(answerer: number, points: number) => {
-          editQuestion(
-            parseInt(qIndex, 10),
-            activeQues.catIndex,
-            activeQues.quesIndex,
-            quiz.categories[activeQues.catIndex].questions[
-              activeQues.quesIndex
-            ],
-            answerer,
-            points
-          );
-          setActiveQues(null);
-        }}
-      />
-    );
 
   return showPlayersScreen || quiz.players.length === 0 ? (
     <EditPlayersComponent

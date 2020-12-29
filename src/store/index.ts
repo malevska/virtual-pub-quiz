@@ -66,7 +66,7 @@ export const useQuizzes = (initial: Quiz[]) => {
       ...quiz,
       categories: [
         ...quiz.categories.slice(0, cIndex),
-        { ...cat, questions: [...cat.questions, quest] },
+        { ...cat, questions: [...cat.questions, { ...quest, id: uuid() }] },
         ...quiz.categories.slice(cIndex + 1),
       ],
     });

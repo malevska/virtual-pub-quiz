@@ -1,35 +1,27 @@
 import * as React from "react";
 import { useState, useContext } from "react";
 import { Pane, TextInput, Textarea, Dialog, RadioGroup } from "evergreen-ui";
-import { Question } from "../store/types";
-import { MethodsContext } from "../store";
-import { v4 as uuid } from "uuid";
+import { EmbedsType, Question } from "../store/types";
 
 // Modifies a question
 export const EditQuestionComponent = ({
   question,
-  questionIndex,
-  catIndex,
-  quizIndex,
-  mode,
   dialog,
   onClose,
 }: {
   question: Question;
-  questionIndex: number;
-  catIndex: number;
-  quizIndex: number;
-  mode: string;
   dialog: boolean;
-  onClose?: () => void;
+  onClose?: (q?: Question) => void;
 }) => {
-  const [questionText, setQuestionText] = useState(question.text);
-  const [answer, setAnswer] = useState(question.answer);
-  const [embedsType, setEmbedsType] = useState(question.embedsType);
-  const [embeds, setEmbeds] = useState(question.embeds);
-  const [points, setPoints] = useState<number>(question.points);
-
-  const { addQuestion, editQuestion } = useContext(MethodsContext);
+  const [questionText, setQuestionText] = useState(
+    question ? question.text : ""
+  );
+  const [answer, setAnswer] = useState(question ? question.answer : "");
+  const [embedsType, setEmbedsType] = useState<EmbedsType>(
+    question ? question.embedsType : "none"
+  );
+  const [embeds, setEmbeds] = useState(question ? question.embeds : "");
+  const [points, setPoints] = useState<number>(question ? question.points : 0);
 
   const options: any = [
     { label: "None", value: "none" },
@@ -64,7 +56,7 @@ export const EditQuestionComponent = ({
         type={"number"}
         value={points}
         onChange={(e: any) => {
-          setPoints(parseInt(e.target.value, 10));
+          setPoints(parseInt(e.target.value || 0, 10));
         }}
       />
     </Pane>
@@ -76,24 +68,17 @@ export const EditQuestionComponent = ({
       title="Question"
       width={"800px"}
       shouldCloseOnOverlayClick={false}
-      onCloseComplete={() => {
-        mode === "add"
-          ? addQuestion(quizIndex, catIndex, {
-              id: uuid(),
-              text: questionText,
-              answer: answer,
-              embedsType: embedsType,
-              embeds: embeds,
-              points: points,
-            })
-          : editQuestion(quizIndex, catIndex, questionIndex, {
-              id: question.id,
-              text: questionText,
-              answer: answer,
-              embedsType: embedsType,
-              embeds: embeds,
-              points: points,
-            });
+      onConfirm={() =>
+        onClose({
+          id: question ? question.id : null,
+          text: questionText,
+          answer: answer,
+          embedsType: embedsType,
+          embeds: embeds,
+          points: points,
+        })
+      }
+      onCancel={() => {
         onClose();
       }}
     >

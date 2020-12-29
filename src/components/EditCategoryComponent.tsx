@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useContext } from "react";
 import { Button, Pane, TextInput, Pill } from "evergreen-ui";
-import { Category } from "../store/types";
+import { Category, Question } from "../store/types";
 import { EditQuestionComponent } from "./EditQuestionComponent";
 import { MethodsContext } from "../store";
 
@@ -18,10 +18,13 @@ export const EditCategoryComponent = ({
   const [categoryTitle, setCategoryTitle] = useState(category.title);
   const [dialogIsShown, setDialogIsShown] = useState<boolean>(false);
   const [qIndex, setQIndex] = useState<number>(-1);
-  const [qmode, setQMode] = useState("add");
-  const { editCategory, removeCategory, removeQuestion } = useContext(
-    MethodsContext
-  );
+  const {
+    editCategory,
+    removeCategory,
+    addQuestion,
+    editQuestion,
+    removeQuestion,
+  } = useContext(MethodsContext);
 
   return (
     <Pane padding="20px">
@@ -44,16 +47,14 @@ export const EditCategoryComponent = ({
       <Button
         onClick={() => {
           setDialogIsShown(true);
-          setQMode("add");
         }}
       >
         Add New Question
       </Button>
       <Pane>
         {category.questions.map((q, index) => (
-          <Pane>
+          <Pane key={q.id}>
             <Pill
-              key={q.id}
               display="inline-flex"
               margin={"5px"}
               isInteractive={true}
@@ -61,7 +62,6 @@ export const EditCategoryComponent = ({
               isSolid
               onClick={() => {
                 setQIndex(index);
-                setQMode("edit");
                 setDialogIsShown(true);
               }}
             >
@@ -80,25 +80,16 @@ export const EditCategoryComponent = ({
 
       {dialogIsShown ? (
         <EditQuestionComponent
-          question={
-            qmode === "add"
-              ? {
-                  id: null,
-                  text: "",
-                  answer: "",
-                  embedsType: "none",
-                  embeds: "",
-                  points: 0,
-                }
-              : category.questions[qIndex]
-          }
-          catIndex={catIndex}
-          quizIndex={quizIndex}
-          questionIndex={qIndex}
-          mode={qmode}
+          question={qIndex === -1 ? null : category.questions[qIndex]}
           dialog={true}
-          onClose={() => {
+          onClose={(q?: Question) => {
+            if (q) {
+              q.id
+                ? editQuestion(quizIndex, catIndex, qIndex, q)
+                : addQuestion(quizIndex, catIndex, q);
+            }
             setDialogIsShown(false);
+            setQIndex(-1);
           }}
         />
       ) : null}
