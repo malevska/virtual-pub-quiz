@@ -66,14 +66,11 @@ export const PlayQuizComponent = ({
             (q) => q.id === activeQues.qId
           );
 
-          editQuestion(
-            parseInt(qIndex, 10),
-            catIndex,
-            quesIndex,
-            quiz.categories[catIndex].questions[quesIndex],
-            answerer,
-            points
-          );
+          editQuestion(parseInt(qIndex, 10), catIndex, quesIndex, {
+            ...quiz.categories[catIndex].questions[quesIndex],
+            answererIndex: answerer,
+            awardedPoints: points,
+          });
           setActiveQues(null);
         }}
       />

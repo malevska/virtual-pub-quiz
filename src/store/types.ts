@@ -39,9 +39,7 @@ export type AppMethods = {
     qIndex: number,
     cIndex: number,
     quIndex: number,
-    q: Question,
-    answerer?: number,
-    points?: number
+    q: Question
   ) => void;
   removeQuestion: (qIndex: number, cIndex: number, questIndex: number) => void;
   setPlayers: (qIndex: number, playersList: string[]) => void;

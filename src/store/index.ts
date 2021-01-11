@@ -72,9 +72,7 @@ export const useQuizzes = (initial: Quiz[]) => {
     qIndex: number,
     cIndex: number,
     questIndex: number,
-    newQuestion: Question,
-    answerer?: number,
-    awardedPoints?: number
+    newQuestion: Question
   ) => {
     setQuizzes(
       produce(quizzes, (quizzes) => {
@@ -83,14 +81,6 @@ export const useQuizzes = (initial: Quiz[]) => {
           1,
           newQuestion
         );
-
-        quizzes[qIndex].categories[cIndex].questions[
-          questIndex
-        ].answererIndex = answerer;
-
-        quizzes[qIndex].categories[cIndex].questions[
-          questIndex
-        ].awardedPoints = awardedPoints;
       })
     );
   };
