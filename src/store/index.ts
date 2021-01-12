@@ -1,5 +1,6 @@
 import { Question, Quiz, AppMethods } from "./types";
 import { useState, createContext } from "react";
+import { produce } from "immer";
 import { v4 as uuid } from "uuid";
 
 /**
@@ -8,99 +9,80 @@ import { v4 as uuid } from "uuid";
 export const useQuizzes = (initial: Quiz[]) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>(initial);
 
-  const addQuiz = (title: string) => {
-    setQuizzes([
-      ...quizzes,
-      { title, id: uuid(), isPlaying: false, players: [], categories: [] },
-    ]);
-  };
+  const addQuiz = (title: string) =>
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes.push({
+          title,
+          id: uuid(),
+          isPlaying: false,
+          players: [],
+          categories: [],
+        });
+      })
+    );
 
-  const removeQuiz = (index: number) => {
-    setQuizzes([...quizzes.slice(0, index), ...quizzes.slice(index + 1)]);
-  };
-
-  const replaceQuiz = (index: number, quiz: Quiz) => {
-    setQuizzes([...quizzes.slice(0, index), quiz, ...quizzes.slice(index + 1)]);
-  };
+  const removeQuiz = (index: number) =>
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes.splice(index, 1);
+      })
+    );
 
   const startQuiz = (index: number, isPlaying: boolean) => {
-    replaceQuiz(index, { ...quizzes[index], isPlaying: isPlaying });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[index].isPlaying = true;
+      })
+    );
   };
 
   const addCategory = (qIndex: number, title: string) => {
-    const quiz = quizzes[qIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [...quiz.categories, { id: uuid(), title, questions: [] }],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories.push({ title, id: uuid(), questions: [] });
+      })
+    );
   };
 
-  const editCategory = (qIndex: number, cIndex: number, title: string) => {
-    const quiz = quizzes[qIndex];
-    const cat = quiz.categories[cIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [
-        ...quiz.categories.slice(0, cIndex),
-        { ...cat, title },
-        ...quiz.categories.slice(cIndex + 1),
-      ],
-    });
-  };
+  const editCategory = (qIndex: number, cIndex: number, title: string) =>
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories[cIndex].title = title;
+      })
+    );
 
   const removeCategory = (qIndex: number, cIndex: number) => {
-    const quiz = quizzes[qIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [
-        ...quiz.categories.slice(0, cIndex),
-        ...quiz.categories.slice(cIndex + 1),
-      ],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories.splice(cIndex, 1);
+      })
+    );
   };
 
   const addQuestion = (qIndex: number, cIndex: number, quest: Question) => {
-    const quiz = quizzes[qIndex];
-    const cat = quizzes[qIndex].categories[cIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [
-        ...quiz.categories.slice(0, cIndex),
-        { ...cat, questions: [...cat.questions, { ...quest, id: uuid() }] },
-        ...quiz.categories.slice(cIndex + 1),
-      ],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories[cIndex].questions.push(quest);
+      })
+    );
   };
 
   const editQuestion = (
     qIndex: number,
     cIndex: number,
     questIndex: number,
-    newQuestion: Question,
-    answerer?: number,
-    awardedPoints?: number
+    newQuestion: Question
   ) => {
-    const quiz = quizzes[qIndex];
-    const cat = quizzes[qIndex].categories[cIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [
-        ...quiz.categories.slice(0, cIndex),
-        {
-          ...cat,
-          questions: [
-            ...cat.questions.slice(0, questIndex),
-            {
-              ...newQuestion,
-              answererIndex: answerer,
-              awardedPoints: awardedPoints,
-            },
-            ...cat.questions.slice(questIndex + 1),
-          ],
-        },
-        ...quiz.categories.slice(cIndex + 1),
-      ],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories[cIndex].questions.splice(
+          questIndex,
+          1,
+          newQuestion
+        );
+      })
+    );
   };
 
   const removeQuestion = (
@@ -108,29 +90,19 @@ export const useQuizzes = (initial: Quiz[]) => {
     cIndex: number,
     questIndex: number
   ) => {
-    const quiz = quizzes[qIndex];
-    const cat = quizzes[qIndex].categories[cIndex];
-    replaceQuiz(qIndex, {
-      ...quiz,
-      categories: [
-        ...quiz.categories.slice(0, cIndex),
-        {
-          ...cat,
-          questions: [
-            ...cat.questions.slice(0, questIndex),
-            ...cat.questions.slice(questIndex + 1),
-          ],
-        },
-        ...quiz.categories.slice(cIndex + 1),
-      ],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].categories[cIndex].questions.splice(questIndex, 1);
+      })
+    );
   };
 
   const setPlayers = (qIndex: number, playersList: string[]) => {
-    replaceQuiz(qIndex, {
-      ...quizzes[qIndex],
-      players: [...playersList],
-    });
+    setQuizzes(
+      produce(quizzes, (quizzes) => {
+        quizzes[qIndex].players = playersList;
+      })
+    );
   };
 
   return [
@@ -138,7 +110,6 @@ export const useQuizzes = (initial: Quiz[]) => {
     {
       addQuiz,
       removeQuiz,
-      replaceQuiz,
       startQuiz,
       addCategory,
       editCategory,
